@@ -19,7 +19,7 @@ def login():
     conn.close()
     #print(len(data))
     if(len(data)):
-        return "Successfully loggedin"
+        return "Success"
     else:
         return "Invalid Credentials"
 
@@ -49,9 +49,13 @@ def register():
 @app.route('/updateuserperformance/<userid>')
 def update_user_performance(userid):
     result = hackerrank_and_github_response.update_user_performance_data(userid)
-    #print(result)
     json_string = json.dumps(result)
     return json_string
+
+@app.route('/updateall')
+def update_all_status():
+    result = hackerrank_and_github_response.update_all_users_status()
+    return result
     
 
 if __name__ == '__main__':

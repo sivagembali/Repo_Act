@@ -41,6 +41,34 @@ def get_ids_studentperformance(userid):
     database_connection.close()
     return result_data_set
 
+#Method to retrive s_numbers from student performance table
+def get_snumber_from_studentperformance_table():
+    database_connection = sqlite3.connect('userdatabase.db')
+    data_cursor = database_connection.cursor()
+    data_cursor = database_connection.execute("SELECT STUDENTINFO FROM STUDENTPERFORMANCE")
+    resultant_data = data_cursor.fetchall()
+    data_cursor.close()
+    database_connection.close()
+    return resultant_data
+
+
+
+"""#Method to store the data coming from the user registration
+def save_user_registration_data(user_details):
+    database_connection = sqlite3.connect('userdatabase.db')
+    username = user_details['username']
+    password = user_details['password']
+    collegename = user_details['collegename']
+    email = user_details['email']
+    mobile = user_details['mobile']
+    user_data = (username,password,email,mobile,collegename)
+    insertion_query = '''INSERT INTO STUDENTREGISTRATION(NAME,PASSWORD,EMAIL,MOBILE,COLLEGENAME) VALUES(?,?,?,?,?)'''
+    database_connection.execute(insertion_query,user_data)
+    database_connection.commit()
+    database_connection.close()
+#save_user_registration_data({'username':'siva','password':'sanjuamma','email':'ssilva356@gmail.com','mobile':'8978098722','collegename':'gvp'})
+"""
+
 
 #creation_tables();
 #insert_data();
