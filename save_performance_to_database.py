@@ -51,7 +51,34 @@ def get_snumber_from_studentperformance_table():
     database_connection.close()
     return resultant_data
 
+#Method to check email exist in the database or not
+def check_email_exist_or_not(email):
+    database_connection = sqlite3.connect('userdatabase.db')
+    data_cursor = database_connection.cursor()
+    data_cursor = database_connection.execute("SELECT USERID FROM STUDENTREGISTRATION WHERE EMAIL='%s'" % email)
+    resultant_data = data_cursor.fetchall()
+    result = {}
+    for row in resultant_data:
+        result['studentinfo']=row[0]
+    data_cursor.close()
+    database_connection.close()
+    return result
+#print(check_email_exist_or_not('ssiva356@gmail.com'))
 
+#Method to update hackerrankid and githubid 
+def update_ids_to_database(user_details):
+    database_connection = sqlite3.connect('userdatabase.db')
+    student_info = user_details['studentinfo']
+    hackerrank_id = user_details['hackerrankid']
+    github_id=user_details['github_id']
+    print(hackerrank_id,github_id,student_info)
+    database_connection.execute("INSERT INTO STUDENTPERFORMANCE(HACKERRANKID,GITHUBID,STUDENTINFO) VALUES(?,?,?)",(hackerrank_id,github_id,student_info))
+    print("changes",database_connection.total_changes)
+    database_connection.commit()
+    database_connection.close()
+    return "Successfully Updated"
+
+    
 
 """#Method to store the data coming from the user registration
 def save_user_registration_data(user_details):

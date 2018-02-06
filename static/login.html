@@ -1,0 +1,44 @@
+<html>
+<body>
+      <!--form action="http://127.0.0.1:5000/login" method="post"-->
+          <table>
+              <tr>
+                  <td>
+                      <label>E-mail/Mobile Nu</label>
+                  </td>
+                  <td>
+                      <input type=text name='emailormobile' id="useremail" />
+                  </td>
+              </tr>
+              <tr>
+                  <td>
+                      <label>Enter Password:</label>
+                  </td>
+                  <td>
+                      <input type=password name='password' id="password" />
+                  </td>
+              </tr>
+              <tr>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      <!--input type="submit" value="login"-->
+                      <button>Login</button>
+                  </td>
+              </tr>
+          
+          
+          </table>
+    <!--/form-->
+    </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $("button").click(function(){
+             input_data= {"emailormobile":$("#useremail").val(),"password":$("#password").val()}
+        $.post("../login",input_data,function(data, status){
+            alert("Data: " + data + "\nStatus: " + status);
+        });
+    });
+    </script>
+</html>

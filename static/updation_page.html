@@ -1,0 +1,23 @@
+<html>
+<body>
+    
+        <p>Email:</p>
+        <input type="email" id="email" required />
+        <p>HackerRank ID:</p>
+        <input type="text" id="hackerrankid" required/>
+        <p>GithubID</p>
+        <input type=text id="githubid" required/>
+        <button>Update</button>
+        
+    </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $("button").click(function(){
+             input_data= {"email":$("#email").val(),"hackerrankid":$("#hackerrankid").val(),"githubid":$("#githubid").val()}
+        $.post("../update_ids",input_data,function(data, status){
+            alert("Data: " + data + "\nStatus: " + status);
+        });
+    });
+    </script>
+
+</html>

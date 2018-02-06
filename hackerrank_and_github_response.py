@@ -62,6 +62,21 @@ def update_all_users_status():
         update_user_performance_data(data[0])
     return "Successfuly updated"
 
+def update_all_ids(ids):
+    email = ids['email_id']
+    print("inside update_all_ids--",ids)
+    student_info_dict = save_performance_to_database.check_email_exist_or_not(email)
+    if(len(student_info_dict)):
+        user_details={}
+        user_details['studentinfo'] =  student_info_dict['studentinfo']
+        user_details['hackerrankid'] = ids['hackerrank_id']
+        user_details['github_id'] = ids['github_id']
+        status = save_performance_to_database.update_ids_to_database(user_details)
+        return status
+    else:
+        return "Email not registred"
+
+    
 '''#Method to verify and store data to database from the registration page
 def verify_and_store_data_to_database(user_form_details):
     user_email = user_form_details['email']

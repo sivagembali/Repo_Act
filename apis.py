@@ -57,6 +57,17 @@ def update_all_status():
     result = hackerrank_and_github_response.update_all_users_status()
     return result
     
-
+@app.route('/update_ids',methods = ['POST'])
+def update_ids():
+    email = request.form['email']
+    hackerrankid=request.form['hackerrankid']
+    githubid=request.form['githubid']
+    ids = {}
+    ids['email_id']=email
+    ids['hackerrank_id']=hackerrankid
+    ids['github_id']=githubid
+    result = hackerrank_and_github_response.update_all_ids(ids)
+    return result
+    
 if __name__ == '__main__':
    app.run(debug=True)
