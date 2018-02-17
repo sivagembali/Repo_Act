@@ -16,13 +16,14 @@ def login():
     details = (pswd,emailnumber,emailnumber)
     cursor = conn.execute("SELECT PASSWORD,EMAIL,MOBILE FROM STUDENTREGISTRATION WHERE PASSWORD= ? AND (EMAIL = ? OR MOBILE= ?) ",details)
     data = cursor.fetchall()
+    cursor.close()
     conn.close()
     #print(len(data))
     if(len(data)):
-        return "Success"
+        return "Successfully Loggedin"
     else:
         return "Invalid Credentials"
-
+#redirect("/static/updation_page.html")
 
 @app.route('/success/<name>')
 def success(name):
@@ -37,13 +38,25 @@ def register():
     collegename = request.form['collegename']
     email = request.form['email']
     mobile = request.form['mobile']
-    user_details = (username,password,email,mobile,collegename)
-    insertion_query = '''INSERT INTO STUDENTREGISTRATION(NAME,PASSWORD,EMAIL,MOBILE,COLLEGENAME) VALUES(?,?,?,?,?)'''
-    database_connection.execute(insertion_query,user_details)
-    database_connection.commit()
-    database_connection.close()
-    return "Successfully registred"
-    
+    if(username =='' or password =='' or collegename=='' or email=='' or mobile==''):
+        return "All Fields are Mandatory"
+    else:
+        email_validation = hackerrank_and_github_response.check_mail(email)
+        if(len(email_validation)):
+            database_connection.close()
+            return "Email already exist"
+        else:
+            user_details = (username,password,email,mobile,collegename)
+            insertion_query = '''INSERT INTO STUDENTREGISTRATION(NAME,PASSWORD,EMAIL,MOBILE,COLLEGENAME) VALUES(?,?,?,?,?)'''
+            database_connection.execute(insertion_query,user_details)
+            database_connection.commit()
+            student_info = hackerrank_and_github_response.check_mail(email)
+            #print(student_info['studentinfo'])
+            value = student_info['userid']
+            database_connection.execute("INSERT INTO STUDENTPERFORMANCE(USERID) VALUES (%s)"% value)
+            database_connection.commit()
+            database_connection.close()
+            return "Successfully Registred"
 
     
 @app.route('/updateuserperformance/<userid>')
@@ -62,12 +75,26 @@ def update_ids():
     email = request.form['email']
     hackerrankid=request.form['hackerrankid']
     githubid=request.form['githubid']
-    ids = {}
-    ids['email_id']=email
-    ids['hackerrank_id']=hackerrankid
-    ids['github_id']=githubid
-    result = hackerrank_and_github_response.update_all_ids(ids)
+    if(hackerrankid=='' or githubid==''):
+        return "All Fields are Mandatory"
+    else:
+        ids = {}
+        ids['email_id']=email
+        ids['hackerrank_id']=hackerrankid
+        ids['github_id']=githubid
+        result = hackerrank_and_github_response.update_all_ids(ids)
+        #to update all students status
+        #hackerrank_and_github_response.update_all_users_status()
+        return result
+
+@app.route('/dashboard')
+def dashboard():
+    mail = request.args.get('email')
+    user_id = hackerrank_and_github_response.get_id_for_email(mail)
+    #print("In side dashboard--",user_id)
+    result = hackerrank_and_github_response.get_status_data(user_id)
+    #print("In side Dashboard result--",result)
     return result
-    
+
 if __name__ == '__main__':
    app.run(debug=True)

@@ -1,14 +1,14 @@
 <html>
    <body>
       
-      <form action = "../register" method = "post">
+      <!--form action = "../register" method = "post"-->
           <table>
               <tr>
                   <td>
                       <label>Name:</label>
                   </td>
                   <td>
-                      <input type=text name='name' required/>
+                      <input type=text id='name' name="name" required/>
                   </td>
               </tr>
               <tr>
@@ -16,7 +16,7 @@
                       <label>E-mail:</label>
                   </td>
                   <td>
-                      <input type=email name='email' required/>
+                      <input type=email id='email' name="email" required/>
                   </td>
               </tr>
               <tr>
@@ -24,7 +24,7 @@
                       <label>Mobile nu:</label>
                   </td>
                   <td>
-                      <input type=text name='mobile' required/>
+                      <input type=text id='mobile' name="mobile" required/>
                   </td>
               </tr>
               <tr>
@@ -32,7 +32,7 @@
                       <label>College Name:</label>
                   </td>
                   <td>
-                      <input type=text name='collegename' required/>
+                      <input type=text id='collegename' name="collegename" required/>
                   </td>
               </tr>
               <tr>
@@ -40,22 +40,44 @@
                       <label>Password:</label>
                   </td>
                   <td>
-                      <input type=password name='password' required/>
+                      <input type=password id='password' name="password" required/>
                   </td>
               </tr>
               <tr>
                   <td>
-                      
+                      <button>Register</button>
                   </td>
                   <td>
-                      <button>Register</button>
+                      <a href="login.html"><p>Login Here</p></a>
                       <!--input type = "submit" value = "register" /-->
                   </td>
               </tr>
           
           
           </table>
-       </form>
+       
     </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function pageRedirect() {
+        window.location.replace("http://127.0.0.1:5000/static/login.html");
+    }   
+        
+        $("button").click(function(){
+             input_data= {"name":$("#name").val(),"email":$("#email").val(),"mobile":$("#mobile").val(),"collegename":$("#collegename").val(),"password":$("#password").val()}
+        $.post("../register",input_data,function(data, status){
+            /*alert("Data: " + data + "\nStatus: " + status);*/
+            if(data=="Successfully Registred"){
+                alert("Data: "+ data);
+                setTimeout("pageRedirect()", 500);
+            }
+            else{
+                alert("Data: " + data);
+            }
+            
+        });
+    });
+    </script>
+
     
 </html>

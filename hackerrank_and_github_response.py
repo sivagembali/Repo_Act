@@ -55,20 +55,21 @@ def update_user_performance_data(userid):
     return "Successfuly updated"
 #update_user_performance_data(2)
 
-#Method to update all users status
+#Method to update all users status retuns success message
 def update_all_users_status():
     snumbers = save_performance_to_database.get_snumber_from_studentperformance_table()
     for data in snumbers:
         update_user_performance_data(data[0])
     return "Successfuly updated"
 
+#Method to update all ids and retutns message status
 def update_all_ids(ids):
     email = ids['email_id']
-    print("inside update_all_ids--",ids)
+    #print("inside update_all_ids--",ids)
     student_info_dict = save_performance_to_database.check_email_exist_or_not(email)
     if(len(student_info_dict)):
         user_details={}
-        user_details['studentinfo'] =  student_info_dict['studentinfo']
+        user_details['userid'] =  student_info_dict['userid']
         user_details['hackerrankid'] = ids['hackerrank_id']
         user_details['github_id'] = ids['github_id']
         status = save_performance_to_database.update_ids_to_database(user_details)
@@ -76,7 +77,29 @@ def update_all_ids(ids):
     else:
         return "Email not registred"
 
+#Method return studentinfo to get hackerrank status and github status
+def check_mail(email):
+    result = save_performance_to_database.check_email_exist_or_not(email)
+    return result
+#print(check_mail('ssiva356@gmail.com'))
+#{'studentinfo':1}
+#Method to get status data from datbase and returns json string
+def get_status_data(userid):
+    result_from_database = save_performance_to_database.get_student_github_hackerrank_status(userid)
+    json_string = json.dumps(result_from_database)
+    return json_string
+
+def get_id_for_email(email):
+    result = save_performance_to_database.check_email_exist_or_not(email)
+    #print(result)
+    #print("Problem in hack--",result['userid'])
+    val = result['userid']
+    return val
+
+#get_id_for_email('ssiva356@gmail.com')
     
+    
+
 '''#Method to verify and store data to database from the registration page
 def verify_and_store_data_to_database(user_form_details):
     user_email = user_form_details['email']

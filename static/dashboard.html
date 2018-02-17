@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            table,td,th{
+                border: 1px solid black;
+            }
+            table{
+                border-collapse: collapse;
+            }
+        
+        </style>
+        <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script>
+            function getURLdata(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+}
+            
+            
+            $(document).ready(function(){
+                        
+                        var mail = getURLdata('email');
+                        $(".email_id").text(mail);                
+                        $.get("../dashboard?email="+mail,function(data,status){
+                            // || (data['hackerrank_status']==null && data['github_status']==null)
+                        //console.log(data);
+                        if(data=='{}'){
+                            $(".display").text("No Data Available");
+                            //alert("Data"+typeof(data));
+                        }else{
+                            //alert("sivaData"+typeof(data));
+                        
+                            
+                            
+                        var result = jQuery.parseJSON(data);
+                        var hacker_rank = jQuery.parseJSON(result['hackerrank_status']);
+                        var hack_table='';
+                        var hack_head ='<tr>'+'<th>'+'Date'+'</th>'+'<th>'+"No.Of.Problems Solved"+'</th>'+'</tr>';
+                        for(key in hacker_rank){
+                           hack_table += '<tr>'+
+                                            '<td>' + key + '</td>'+
+                                            '<td>'+hacker_rank[key] + '</td>' +
+                                    '</tr>';                            
+                        }
+                        var git_hub = jQuery.parseJSON(result['github_status']);
+                        var git_table='';
+                        //console.log(git_hub[113569281]['created_at']);
+                        var git_head ='<tr>'+'<th>'+'Repo Name'+'</th>'+'<th>'+"Created Date"+'</th>'+'<th>'+"Pushed Date"+'</th>'+'</tr>';
+                        for(key in git_hub){
+                            //console.log(git_hub[key]['name'],git_hub[key]['created_at'],git_hub[key]['pushed_at']);
+                            git_table += '<tr>' + 
+                                            '<td>' + git_hub[key]['name'] + '</td>'+
+                                            '<td>' + git_hub[key]['created_at'] + '</td>'+
+                                            '<td>' + git_hub[key]['pushed_at'] + '</td>'+
+                                    '</tr>';
+                        }
+                    $(".table").html(hack_head+hack_table+'<br/></br>'+git_head+git_table);    
+                        }
+                });
+                });
+    </script>
+        
+    </head>
+    <body>
+        <p class="email_id"></p>
+        <div class="contact" align='right'>
+                <a href="updation_page.html" style="text-decoration: none;">Profile Updation</a>
+                <br><a href="login.html" style="text-decoration: none;">Logout</a>
+            </div>
+        <p class="display"></p>
+        <table class="table">
+        </table>
+            <div id="content">
+        </div>
+    </body>
+     
+</html>
