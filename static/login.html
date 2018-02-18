@@ -1,5 +1,6 @@
 <html>
-<body background="s.jpg" style="width:auto;height: auto;background-repeat: no-repeat">
+<!-background="s.jpg" style="width:auto;height: auto;background-repeat: no-repeat"
+--><body >
       <table>
               <tr>
                   <td>
@@ -34,7 +35,8 @@
     <script>
         function pageRedirect() {
             var emailid = $("#useremail").val()
-        window.location.replace("http://127.0.0.1:5000/static/dashboard.html?email="+emailid);
+        //window.location.replace("http://127.0.0.1:5000/static/dashboard.html?email="+emailid);
+            window.location.href="dashboard.html?email="+emailid;
     }      
         $("button").click(function(){
              input_data= {"emailormobile":$("#useremail").val(),"password":$("#password").val()}
@@ -45,7 +47,7 @@
             }else{
                 alert("Data:"+data);
                 //window.location.href("login.html");
-                window.location.replace("http://127.0.0.1:5000/static/login.html");
+                window.location.href="login.html";
             }
             /*alert("Data: " + data + "\nStatus: " + status);*/
             //var user_mail = $("#useremail").val();

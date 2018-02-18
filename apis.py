@@ -4,7 +4,7 @@ import hackerrank_and_github_response
 from flask import Flask, redirect, url_for, request,current_app
 app = Flask(__name__)
 
-@app.route('/')
+#@app.route('/')
 def root():
     return current_app.send_static_file('login.html')
 
