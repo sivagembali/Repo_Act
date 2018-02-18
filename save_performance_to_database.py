@@ -95,7 +95,26 @@ def get_student_github_hackerrank_status(student_info):
     return result_status
     
     
+def get_all_students_data():
+    database_connection = sqlite3.connect('userdatabase.db')
+    data_cursor = database_connection.cursor()
+    data_cursor = database_connection.execute("SELECT * FROM STUDENTREGISTRATION")
+    data = data_cursor.fetchall()
+    result_status = {}
+    for row in data:
+        s_id = row[0]
+        result_status[s_id] = {}
+        result_status[s_id]['name:']=row[1]
+        result_status[s_id]['password']=row[2]
+        result_status[s_id]['email'] = row[3]
+        result_status[s_id]['mobile'] = row[4]
+        result_status[s_id]['college']= row[5]
+    return result_status
+    #print(result_status)
+#get_all_students_data()
 
+    
+    
 """#Method to store the data coming from the user registration
 def save_user_registration_data(user_details):
     database_connection = sqlite3.connect('userdatabase.db')

@@ -97,7 +97,10 @@ def get_id_for_email(email):
     return val
 
 #get_id_for_email('ssiva356@gmail.com')
-    
+#Method to get studetn details
+def get_students_data():
+    result = save_performance_to_database.get_all_students_data()
+    return result
     
 
 '''#Method to verify and store data to database from the registration page

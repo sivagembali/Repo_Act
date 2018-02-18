@@ -96,5 +96,11 @@ def dashboard():
     #print("In side Dashboard result--",result)
     return result
 
+#method to display students data
+@app.route('/students_data')
+def students_data():
+    result = hackerrank_and_github_response.get_students_data()
+    return json.dumps(result)
+
 if __name__ == '__main__':
    app.run(debug=True)
