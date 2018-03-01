@@ -140,14 +140,16 @@ def get_details():
     result_data_set={}
     result_data = result_cursor.fetchall()
     for row in result_data:
-        result_data_set[row[0]]={}
-        
-        print(row[0])
-    
-    
-    
-    result={1:{'student_name':'g siva prasad','hackerrankid':'sivagembali','githubid':'sivagembali','linkedinid':'sivagembali'}}
-    return json.dumps(result)
+        row_id = row[0]
+        result_data_set[row_id]={}
+        result_data_set[row_id]['student_name']= row[1]
+        result_data_set[row_id]['gender']= row[2]
+        result_data_set[row_id]['hackerrankid']= row[3]
+        result_data_set[row_id]['githubid']= row[4]
+        result_data_set[row_id]['linkedinid']= row[5]
+    result={1:{'student_name':'g siva prasad','gender':'male','hackerrankid':'sivagembali','githubid':'sivagembali','linkedinid':'sivagembali'}}
+    #print(result_data_set)
+    return json.dumps(result_data_set)
 
 
 if __name__ == '__main__':

@@ -22,7 +22,7 @@ def creation_tables():
 def insert_data():
     database_connection = sqlite3.connect('userdatabase.db')
     database_connection.execute("INSERT INTO STUDENTREGISTRATION (USERID,NAME,PASSWORD,EMAIL,MOBILE,COLLEGENAME,GENDER) VALUES(1,'siva gembali','sanjana','ssiva356@gmail.com','8978098160','GVP College','male');")
-    database_connection.execute("INSERT INTO STUDENTPERFORMANCE (S_NUMBER,HACKERRANKID,GITHUBID,USERID) VALUES(1,'sivagembali','sivagembali',1);")
+    database_connection.execute("INSERT INTO STUDENTPERFORMANCE (S_NUMBER,HACKERRANKID,GITHUBID,LINKEDINID,USERID) VALUES(1,'sivagembali','sivagembali','gembali-siva-prasada-rao-029624155',1);")
     database_connection.commit()
     database_connection.close()
     
