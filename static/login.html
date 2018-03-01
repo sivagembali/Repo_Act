@@ -1,41 +1,87 @@
-<html>
-<!-background="s.jpg" style="width:auto;height: auto;background-repeat: no-repeat"
---><body background="s.jpg" style="width:1000px;height: 600px;background-repeat: no-repeat">
-      <table>
-              <tr>
-                  <td>
-                      <label>E-mail/Mobile Nu</label>
-                  </td>
-                  <td>
-                      <input type=text name='emailormobile' id="useremail" />
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      <label>Enter Password:</label>
-                  </td>
-                  <td>
-                      <input type=password name='password' id="password" />
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      <button>Login</button>
-                  </td>
-                  <td>
-                      <a href="register.html" style="text-decoration: none">Register Here</a>
-                  </td>
-              </tr>
-          
-          
-          </table>
-    <!--/form-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <style>
+        .contact div{
+    display: grid;
+    #grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+.contact div label{
+    display: block;
+}
+.contact div p{
+    margin: 0;
+}
+
+.contact div .full{
+    grid-column: auto;
+}
+.contact div button,.contact div input,.contact div textarea{
+    width: 100%;
+    padding: 1em;
+    border: 1px solid #c9e6ff;
+}
+.contact div button{
+    background: #c9e6ff;
+    border: 0;
+    text-transform: uppercase;
+}
+
+.contact div button:hover,.contact div button:focus{
+    background:#92bde7;
+    color: #fff;
+    outline: 0;
+    transition: background-color 2s ease-out;
+}
+.college-info i{
+    color: #485e74;
+}
+.alert{
+    padding: 10px;
+    background: #79c879;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 10px;
+    display: none;
+}
+        </style>
+        <meta charset="utf-8">
+        <meta name="viewport" "width=device-width, initial-scale = 1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Python Workshops</title>
+        <link rel="stylesheet" href="styles.css">
+
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="brand"><span>Python</span>Workshops</h1>
+            <div class="wrapper /*animated bounceInLeft*/">
+                <div class="contact">
+                    <h3>Student Login</h3>
+                    <div id="contactform">
+                        <p>
+                            <label>Email/Mobile</label>
+                            <input type="text" name="emailormobile" id="useremail" required>
+                        </p>
+                        <p>
+                            <label>Password</label>
+                            <input type="password" name="password" id="password" required>
+                        </p>
+                        <p class="full">
+                            <button>Login</button>
+                        </p>
+                        <p><center><a href="register.html" style="text-decoration: none" >Register Here</a></center></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
         function pageRedirect() {
             var emailid = $("#useremail").val()
-        //window.location.replace("http://127.0.0.1:5000/static/dashboard.html?email="+emailid);
+            //window.location.replace("http://127.0.0.1:5000/static/dashboard.html?email="+emailid);
             window.location.href="dashboard.html?email="+emailid;
     }      
         $("button").click(function(){
@@ -43,17 +89,12 @@
         $.post("../login",input_data,function(data, status){
             if(data == "Successfully Loggedin"){
                 alert("Data:"+data);
+                console.log(data);
                 setTimeout("pageRedirect()", 500);
             }else{
                 alert("Data:"+data);
-                //window.location.href("login.html");
                 window.location.href="login.html";
             }
-            /*alert("Data: " + data + "\nStatus: " + status);*/
-            //var user_mail = $("#useremail").val();
-            //$.session.set('email',user_mail);
-            //console.log($.session.get('email'));
-            
         });
     });
         

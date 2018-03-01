@@ -12,6 +12,8 @@ def get_hackerrank_data(hackerrank_id):
         return hackerrank_data_type_json_string
     except Exception as exc:
         return "No Data Available"
+    
+#print(get_hackerrank_data("sivagembali"))
 #method to get data from url link with github_id and returns a json string
 def get_github_data(github_id):
     #getting data from github using url and github_id
@@ -89,12 +91,14 @@ def get_status_data(userid):
     json_string = json.dumps(result_from_database)
     return json_string
 
+#modified on 25th feb 
 def get_id_for_email(email):
     result = save_performance_to_database.check_email_exist_or_not(email)
-    #print(result)
-    #print("Problem in hack--",result['userid'])
-    val = result['userid']
-    return val
+    #print(type(result))
+    if isEmpty(result):
+        return result['userid']
+    else:
+        return 0
 
 #get_id_for_email('ssiva356@gmail.com')
 #Method to get studetn details
@@ -102,7 +106,11 @@ def get_students_data():
     result = save_performance_to_database.get_all_students_data()
     return result
     
-
+def isEmpty(dictionary):
+   for element in dictionary:
+     if element:
+       return True
+     return False
 '''#Method to verify and store data to database from the registration page
 def verify_and_store_data_to_database(user_form_details):
     user_email = user_form_details['email']

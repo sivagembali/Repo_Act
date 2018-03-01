@@ -1,71 +1,113 @@
-<html>
-   <body>
-      
-      <!--form action = "../register" method = "post"-->
-          <table>
-              <tr>
-                  <td>
-                      <label>Name:</label>
-                  </td>
-                  <td>
-                      <input type=text id='name' name="name" required/>
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      <label>E-mail:</label>
-                  </td>
-                  <td>
-                      <input type=email id='email' name="email" required/>
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      <label>Mobile nu:</label>
-                  </td>
-                  <td>
-                      <input type=text id='mobile' name="mobile" required/>
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      <label>College Name:</label>
-                  </td>
-                  <td>
-                      <input type=text id='collegename' name="collegename" required/>
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      <label>Password:</label>
-                  </td>
-                  <td>
-                      <input type=password id='password' name="password" required/>
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      <button>Register</button>
-                  </td>
-                  <td>
-                      <a href="static/login.html"><p>Login Here</p></a>
-                      <!--input type = "submit" value = "register" /-->
-                  </td>
-              </tr>
-          
-          
-          </table>
-       
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <style>
+        .contact div{
+            display: grid;
+            #grid-template-columns: 1fr 1fr;
+            grid-gap: 10px;
+        }
+        .contact div label{
+            display: block;
+        }
+        .contact div p{
+            margin: 0;
+        }
+
+        .contact div .full{
+            grid-column: auto;
+        }
+        .contact div button,.contact div input,.contact div select,.contact div textarea{
+            width: 100%;
+            padding: 1em;
+            border: 1px solid #c9e6ff;
+        }
+        .contact div button{
+            background: #c9e6ff;
+            border: 0;
+            text-transform: uppercase;
+        }
+
+        .contact div button:hover,.contact div button:focus{
+            background:#92bde7;
+            color: #fff;
+            outline: 0;
+            transition: background-color 2s ease-out;
+        }
+        .college-info i{
+            color: #485e74;
+        }
+        .alert{
+            padding: 10px;
+            background: #79c879;
+            text-align: center;
+            color: #fff;
+            margin-bottom: 10px;
+            display: none;
+        }
+        </style>
+        <meta charset="utf-8">
+        <meta name="viewport" "width=device-width, initial-scale = 1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Python Workshops</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="brand"><span>Python</span> Workshops</h1>
+            <div class="wrapper /*animated bounceInLeft*/">
+                <div class="contact">
+                    <h3>Student Registration</h3>
+                    <div id="contactform">
+                        <p>
+                            <label>Name:</label>
+                            <input type="text" name="name" id="name" required/>
+                        </p>
+                        <p>
+                            <label>E-mail:</label>
+                            <input type="email" name="task" id="email" required/>
+                        </p>
+                        <p>
+                            <label>Gender:</label>
+                            <select name="gender" id="gender">
+                                <option value="select">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </p>
+                        <p>
+                            <label>Mobile nu:</label>
+                            <input type=text id='mobile' name="mobile" required/>
+                        </p>
+                        <p>
+                            <label>College Name:</label>
+                            <input type=text id='collegename' name="collegename" required/>
+                        </p>
+                        <p>
+                            <label>Password:</label>
+                            <input type=password id='password' name="password" required/>
+                        </p>
+                       <p class="full">
+                            <button>Register</button>
+                        </p>
+                        <p>
+                            <center><a href="login.html" style="text-decoration: none"><p>Login Here</p></a></center>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
         function pageRedirect() {
         //window.location.replace("http://127.0.0.1:5000/static/login.html");
-            window.location.href="static/login.html";
+            window.location.href="login.html";
     }   
         
         $("button").click(function(){
-             input_data= {"name":$("#name").val(),"email":$("#email").val(),"mobile":$("#mobile").val(),"collegename":$("#collegename").val(),"password":$("#password").val()}
+            //console.log($("#gender").val());
+             input_data= {"gender":$("#gender").val(),"name":$("#name").val(),"email":$("#email").val(),"mobile":$("#mobile").val(),"collegename":$("#collegename").val(),"password":$("#password").val()}
         $.post("../register",input_data,function(data, status){
             /*alert("Data: " + data + "\nStatus: " + status);*/
             if(data=="Successfully Registred"){
@@ -79,6 +121,4 @@
         });
     });
     </script>
-
-    
 </html>

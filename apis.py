@@ -33,12 +33,13 @@ def success(name):
 @app.route('/register',methods = ['POST'])
 def register():
     database_connection = sqlite3.connect('userdatabase.db')
+    gender = request.form['gender']
     username = request.form['name']
     password = request.form['password']
     collegename = request.form['collegename']
     email = request.form['email']
     mobile = request.form['mobile']
-    if(username =='' or password =='' or collegename=='' or email=='' or mobile==''):
+    if(username =='' or password =='' or collegename=='' or email=='' or mobile=='' or gender=='' or gender=='select'):
         return "All Fields are Mandatory"
     else:
         email_validation = hackerrank_and_github_response.check_mail(email)
@@ -46,8 +47,8 @@ def register():
             database_connection.close()
             return "Email already exist"
         else:
-            user_details = (username,password,email,mobile,collegename)
-            insertion_query = '''INSERT INTO STUDENTREGISTRATION(NAME,PASSWORD,EMAIL,MOBILE,COLLEGENAME) VALUES(?,?,?,?,?)'''
+            user_details = (username,password,email,mobile,collegename,gender)
+            insertion_query = '''INSERT INTO STUDENTREGISTRATION(NAME,PASSWORD,EMAIL,MOBILE,COLLEGENAME,GENDER) VALUES(?,?,?,?,?,?)'''
             database_connection.execute(insertion_query,user_details)
             database_connection.commit()
             student_info = hackerrank_and_github_response.check_mail(email)
@@ -101,6 +102,53 @@ def dashboard():
 def students_data():
     result = hackerrank_and_github_response.get_students_data()
     return json.dumps(result)
+
+#method to get single user performance in hackerrank
+@app.route('/get_hack_data/<hackerrank_id>')
+def get_hack_data(hackerrank_id):
+    sum_data = 0
+    data=hackerrank_and_github_response.get_hackerrank_data(hackerrank_id)
+    #print(type(data))
+    try:
+        dict_data =json.loads(data)
+        if(type(dict_data) is dict):
+            for key in dict_data.keys():
+                sum_data = sum_data + int(dict_data[key])
+            #print(type(int(dict_data['2016-07-22'])))
+            return str(sum_data)+str(dict_data)
+    except Exception as exc:
+        return "no data"
+
+#method to get single user performance in hackerrank
+@app.route('/get_git_data/<git_id>')
+def get_git_data(git_id):
+    result = hackerrank_and_github_response.get_github_data(git_id)
+    try:
+        dict_data = json.loads(result)
+        if(type(dict_data) is dict):
+            return str(dict_data)
+    except Exception as exp:
+        return "no data"
+
+    
+#method to generate dynamic student details
+@app.route('/get_details')
+def get_details():
+    database_connection = sqlite3.connect('userdatabase.db')
+    data_cursor = database_connection.cursor()
+    result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.gender,studentperformance.hackerrankid,studentperformance.githubid,studentperformance.linkedinid from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
+    result_data_set={}
+    result_data = result_cursor.fetchall()
+    for row in result_data:
+        result_data_set[row[0]]={}
+        
+        print(row[0])
+    
+    
+    
+    result={1:{'student_name':'g siva prasad','hackerrankid':'sivagembali','githubid':'sivagembali','linkedinid':'sivagembali'}}
+    return json.dumps(result)
+
 
 if __name__ == '__main__':
    app.run(debug=True)

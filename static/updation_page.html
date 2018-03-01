@@ -1,29 +1,97 @@
-<html>
-<body>
-    
-        <p>Email:</p>
-        <input type="email" id="email" required />
-        <p>HackerRank ID:</p>
-        <input type="text" id="hackerrankid" required/>
-        <p>GithubID</p>
-        <input type=text id="githubid" required/>
-        <button>Update</button>
-        <!--a href="dashboard_page.html"></a-->
-        
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <style>
+        .contact div{
+    display: grid;
+    #grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+.contact div label{
+    display: block;
+}
+.contact div p{
+    margin: 0;
+}
+
+.contact div .full{
+    grid-column: auto;
+}
+.contact div button,.contact div input,.contact div textarea{
+    width: 100%;
+    padding: 1em;
+    border: 1px solid #c9e6ff;
+}
+.contact div button{
+    background: #c9e6ff;
+    border: 0;
+    text-transform: uppercase;
+}
+
+.contact div button:hover,.contact div button:focus{
+    background:#92bde7;
+    color: #fff;
+    outline: 0;
+    transition: background-color 2s ease-out;
+}
+.college-info i{
+    color: #485e74;
+}
+.alert{
+    padding: 10px;
+    background: #79c879;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 10px;
+    display: none;
+}
+        </style>
+        <meta charset="utf-8">
+        <meta name="viewport" "width=device-width, initial-scale = 1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Python Workshops</title>
+        <link rel="stylesheet" href="styles.css">
+
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="brand"><span>Python</span>Workshops</h1>
+            <div class="wrapper /*animated bounceInLeft*/">
+                <div class="contact">
+                    <h3>Student ID Updation</h3>
+                    <div id="contactform">
+                        <p>
+                            <label>Email/Mobile:</label>
+                            <input type="text" id="useremail" required/>
+                        </p>
+                        <p>
+                            <label>HackerRank ID:</label>
+                            <input type="text" id="hackerrankid" required/>
+                        </p>
+                        <p>
+                            <label>Github ID:</label>
+                            <input type="text" id="githubid" required/>
+                        </p>
+                        <p class="full">
+                            <button>Update</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
            function pageRedirect() {
         //window.location.replace("http://127.0.0.1:5000/static/dashboard.html?email="+$("#email").val());
-               window.location.href="dashboard.html?email="+$("#email").val();
+               window.location.href="dashboard.html?email="+$("#useremail").val();
     }
         $("button").click(function(){
-             input_data= {"email":$("#email").val(),"hackerrankid":$("#hackerrankid").val(),"githubid":$("#githubid").val()}
+             input_data= {"email":$("#useremail").val(),"hackerrankid":$("#hackerrankid").val(),"githubid":$("#githubid").val()}
         $.post("../update_ids",input_data,function(data, status){
             alert("Data: " + data + "\nStatus: " + status);
             setTimeout("pageRedirect()", 500);
         });
     });
     </script>
-
 </html>
