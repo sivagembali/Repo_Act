@@ -132,6 +132,8 @@ def get_git_data(git_id):
 
     
 #method to generate dynamic student details
+#result will be in this format{1:{'student_name':'g siva prasad','gender':'male','hackerrankid':'sivagembali','githubid':'sivagembali','linkedinid':'sivagembali'}}
+
 @app.route('/get_details')
 def get_details():
     database_connection = sqlite3.connect('userdatabase.db')
@@ -147,8 +149,6 @@ def get_details():
         result_data_set[row_id]['hackerrankid']= row[3]
         result_data_set[row_id]['githubid']= row[4]
         result_data_set[row_id]['linkedinid']= row[5]
-    result={1:{'student_name':'g siva prasad','gender':'male','hackerrankid':'sivagembali','githubid':'sivagembali','linkedinid':'sivagembali'}}
-    #print(result_data_set)
     return json.dumps(result_data_set)
 
 
