@@ -55,7 +55,7 @@ body{
 .contact div .full{
     grid-column: auto;
 }
-.contact div button,.contact div input,.contact div textarea{
+.contact div input,.contact div button,.contact div textarea{
     width: 100%;
     padding: 1em;
     border: 1px solid #c9e6ff;

@@ -80,6 +80,14 @@
                             <input type=text id='mobile' name="mobile" required/>
                         </p>
                         <p>
+                            <label>Location</label>
+                            <input type=text id='location' name='location' placeholder="Ex:Vizag" required/>
+                        </p>
+                        <p>
+                            <label>Batch</label>
+                            <input type="text" id="batch" name="batch" placeholder="Ex:Feb2018" required/>
+                        </p>
+                        <p>
                             <label>College Name:</label>
                             <input type=text id='collegename' name="collegename" required/>
                         </p>
@@ -107,7 +115,7 @@
         
         $("button").click(function(){
             //console.log($("#gender").val());
-             input_data= {"gender":$("#gender").val(),"name":$("#name").val(),"email":$("#email").val(),"mobile":$("#mobile").val(),"collegename":$("#collegename").val(),"password":$("#password").val()}
+             input_data= {"batch":$("#batch").val(),"location":$("#location").val(),"gender":$("#gender").val(),"name":$("#name").val(),"email":$("#email").val(),"mobile":$("#mobile").val(),"collegename":$("#collegename").val(),"password":$("#password").val()}
         $.post("../register",input_data,function(data, status){
             /*alert("Data: " + data + "\nStatus: " + status);*/
             if(data=="Successfully Registred"){

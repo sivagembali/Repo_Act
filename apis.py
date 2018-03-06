@@ -33,13 +33,15 @@ def success(name):
 @app.route('/register',methods = ['POST'])
 def register():
     database_connection = sqlite3.connect('userdatabase.db')
+    batch = request.form['batch']
+    location = request.form['location']
     gender = request.form['gender']
     username = request.form['name']
     password = request.form['password']
     collegename = request.form['collegename']
     email = request.form['email']
     mobile = request.form['mobile']
-    if(username =='' or password =='' or collegename=='' or email=='' or mobile=='' or gender=='' or gender=='select'):
+    if(username =='' or password =='' or collegename=='' or email=='' or mobile=='' or gender=='' or gender=='select' or batch =='' or location==''):
         return "All Fields are Mandatory"
     else:
         email_validation = hackerrank_and_github_response.check_mail(email)
@@ -47,8 +49,8 @@ def register():
             database_connection.close()
             return "Email already exist"
         else:
-            user_details = (username,password,email,mobile,collegename,gender)
-            insertion_query = '''INSERT INTO STUDENTREGISTRATION(NAME,PASSWORD,EMAIL,MOBILE,COLLEGENAME,GENDER) VALUES(?,?,?,?,?,?)'''
+            user_details = (username,password,email,mobile,collegename,gender,batch,location)
+            insertion_query = '''INSERT INTO STUDENTREGISTRATION(NAME,PASSWORD,EMAIL,MOBILE,COLLEGENAME,GENDER,BATCH,LOCATION) VALUES(?,?,?,?,?,?,?,?)'''
             database_connection.execute(insertion_query,user_details)
             database_connection.commit()
             student_info = hackerrank_and_github_response.check_mail(email)
@@ -115,7 +117,7 @@ def get_hack_data(hackerrank_id):
             for key in dict_data.keys():
                 sum_data = sum_data + int(dict_data[key])
             #print(type(int(dict_data['2016-07-22'])))
-            return str(sum_data)+str(dict_data)
+            return str(sum_data)
     except Exception as exc:
         return "no data"
 
@@ -150,6 +152,34 @@ def get_details():
         result_data_set[row_id]['githubid']= row[4]
         result_data_set[row_id]['linkedinid']= row[5]
     return json.dumps(result_data_set)
+
+#method to read data from csv and store it in a database
+@app.route('/store_students_data')    
+def store_csv_data_to_database():
+    result = hackerrank_and_github_response.store_data_to_database()
+    return result   
+
+#method to show students current status
+@app.route('/students_status_display')
+def students_status_display():
+    database_connection = sqlite3.connect('userdatabase.db')
+    data_cursor = database_connection.cursor()
+    result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.batch,studentregistration.location,studentperformance.hackerrankid,studentperformance.hackerrank_status,studentperformance.github_status from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
+    result_data_set={}
+    result_data = result_cursor.fetchall()
+    for row in result_data:
+        row_id = row[0]
+        result_data_set[row_id]={}
+        result_data_set[row_id]['name'] = row[1].lower()
+        result_data_set[row_id]['batch'] = row[2]
+        result_data_set[row_id]['location'] = row[3]
+        hackerrankid = row[4]
+        result_data_set[row_id]['hackerrank_status'] = get_hack_data(hackerrankid)
+    print(result_data_set)
+    return json.dumps(result_data_set)
+    
+
+    
 
 
 if __name__ == '__main__':

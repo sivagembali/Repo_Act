@@ -11,23 +11,39 @@ def save_u_p_data(hackerrank_github_data):
     database_connection.close()
     #print("Successfully Updated")
 
-#Method to create tables STUDENTPERFORMANCE STUDENTREGISTRATION
-def creation_tables():
-    database_connection = sqlite3.connect('userdatabase.db')
-    database_connection.execute('''CREATE TABLE STUDENTREGISTRATION (USERID INTEGER PRIMARY KEY,NAME TEXT NOT NULL,PASSWORD TEXT NOT NULL,EMAIL TEXT UNIQUE,MOBILE TEXT NOT NULL,COLLEGENAME TEXT NOT NULL,GENDER TEXT NOT NULL);''')
-    database_connection.execute('''CREATE TABLE STUDENTPERFORMANCE(S_NUMBER INTEGER PRIMARY KEY ,HACKERRANKID TEXT,GITHUBID TEXT,HACKERRANK_STATUS TEXT,GITHUB_STATUS TEXT,LINKEDINID TEXT,STACKOVERFLOWID TEXT,USERID INTEGER,FOREIGN KEY (USERID) REFERENCES STUDENTREGISTRATION(USERID) )''')
-    database_connection.close()
-    
 #Method to insert data into tables
-def insert_data():
+def insert_data(name,password,email,mobile,college,gender,batch,location,hackerrankid,githubid,linkedinid):
     database_connection = sqlite3.connect('userdatabase.db')
-    database_connection.execute("INSERT INTO STUDENTREGISTRATION (USERID,NAME,PASSWORD,EMAIL,MOBILE,COLLEGENAME,GENDER) VALUES(1,'siva gembali','sanjana','ssiva356@gmail.com','8978098160','GVP College','male');")
-    database_connection.execute("INSERT INTO STUDENTPERFORMANCE (S_NUMBER,HACKERRANKID,GITHUBID,LINKEDINID,USERID) VALUES(1,'sivagembali','sivagembali','gembali-siva-prasada-rao-029624155',1);")
-    database_connection.commit()
-    database_connection.close()
+    if(table_exists(database_connection,'STUDENTREGISTRATION')):
+        user_details = (name,password,email,mobile,college,gender,batch,location)
+        insertion_query = '''INSERT INTO STUDENTREGISTRATION(NAME,PASSWORD,EMAIL,MOBILE,COLLEGENAME,GENDER,BATCH,LOCATION) VALUES(?,?,?,?,?,?,?,?)'''
+        database_connection.execute(insertion_query,user_details)
+        database_connection.commit()
+    else:
+        database_connection.execute('''CREATE TABLE STUDENTREGISTRATION (USERID INTEGER PRIMARY KEY,NAME TEXT NOT NULL,PASSWORD TEXT NOT NULL,EMAIL TEXT UNIQUE,MOBILE TEXT NOT NULL,COLLEGENAME TEXT NOT NULL,GENDER TEXT NOT NULL,BATCH TEXT NOT NULL,LOCATION TEXT NOT NULL);''')
+        user_details = (1,name,password,email,mobile,college,gender,batch,location)
+        insertion_query = '''INSERT INTO STUDENTREGISTRATION(USERID,NAME,PASSWORD,EMAIL,MOBILE,COLLEGENAME,GENDER,BATCH,LOCATION) VALUES(?,?,?,?,?,?,?,?,?)'''
+        database_connection.execute(insertion_query,user_details)
+        database_connection.commit()
     
-#creation_tables()
-#insert_data()
+    if(table_exists(database_connection,'STUDENTPERFORMANCE')):
+        student_info = check_email_exist_or_not(email)
+        #print(student_info['studentinfo'])
+        value = student_info['userid']
+        user_details = (hackerrankid,githubid,linkedinid,value)
+        insertion_query='''INSERT INTO STUDENTPERFORMANCE (HACKERRANKID,GITHUBID,LINKEDINID,USERID) VALUES(?,?,?,?)'''
+        database_connection.execute(insertion_query,user_details)
+        database_connection.commit()
+    else:
+        database_connection.execute('''CREATE TABLE STUDENTPERFORMANCE(S_NUMBER INTEGER PRIMARY KEY ,HACKERRANKID TEXT,GITHUBID TEXT,HACKERRANK_STATUS TEXT,GITHUB_STATUS TEXT,LINKEDINID TEXT,STACKOVERFLOWID TEXT,USERID INTEGER,FOREIGN KEY (USERID) REFERENCES STUDENTREGISTRATION(USERID) )''')
+        student_info = check_email_exist_or_not(email)
+        #print(student_info['studentinfo'])
+        value = student_info['userid']
+        user_details = (1,hackerrankid,githubid,linkedinid,value)
+        insertion_query='''INSERT INTO STUDENTPERFORMANCE (S_NUMBER,HACKERRANKID,GITHUBID,LINKEDINID,USERID) VALUES(?,?,?,?,?)'''
+        database_connection.execute(insertion_query,user_details)
+        database_connection.commit()
+    database_connection.close()
 
 #Method to retrive data from database returns a json 
 def get_ids_studentperformance(userid):
@@ -110,11 +126,20 @@ def get_all_students_data():
         result_status[s_id]['mobile'] = row[4]
         result_status[s_id]['college']= row[5]
         result_status[s_id]['gender']=row[6]
+        result_status[s_id]['batch']=row[7]
+        result_status[s_id]['location']=row[8]
     return result_status
     #print(result_status)
 #get_all_students_data()
 
-    
+#method to check table exist or not
+def table_exists(conn,table_name):
+    result = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='"+table_name+"'")
+    result_data = result.fetchall()
+    if len(result_data)>0 and result_data[0][0] == table_name:
+        return True
+    else: 
+        return False
     
 """#Method to store the data coming from the user registration
 def save_user_registration_data(user_details):
@@ -132,7 +157,3 @@ def save_user_registration_data(user_details):
     database_connection.close()
 #save_user_registration_data({'username':'siva','password':'sanjuamma','email':'ssilva356@gmail.com','mobile':'8978098722','collegename':'gvp','gender':'male'})
 """
-
-
-#creation_tables();
-#insert_data();

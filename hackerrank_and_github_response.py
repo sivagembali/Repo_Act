@@ -111,6 +111,31 @@ def isEmpty(dictionary):
      if element:
        return True
      return False
+
+#method to store csv data to database
+def store_data_to_database():
+    file_access = open('FebWorkshops.csv','r')
+    file_data = file_access.read()
+    file_data_lines = file_data.split('\n')
+    for line_nu in range(1,len(file_data_lines)-1):
+        line_data = file_data_lines[line_nu].split(',')
+        name = line_data[1]
+        password = line_data[2]
+        email = line_data[3]
+        mobile = line_data[4]
+        college = line_data[5]
+        gender = line_data[6]
+        batch = line_data[12]
+        location = line_data[11]
+        hackerrankid = line_data[7]
+        githubid = line_data[8]
+        linkedinid = line_data[9]
+        save_performance_to_database.insert_data(name,password,email,mobile,college,gender,batch,location,hackerrankid,githubid,linkedinid)
+        #print(email)
+    return "success"
+    #print(file_data_lines[37])
+#store_data_to_database()
+
 '''#Method to verify and store data to database from the registration page
 def verify_and_store_data_to_database(user_form_details):
     user_email = user_form_details['email']
