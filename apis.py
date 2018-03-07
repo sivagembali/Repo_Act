@@ -125,6 +125,7 @@ def get_hack_data(hackerrank_id):
 @app.route('/get_git_data/<git_id>')
 def get_git_data(git_id):
     result = hackerrank_and_github_response.get_github_data(git_id)
+    print(result)
     try:
         dict_data = json.loads(result)
         if(type(dict_data) is dict):

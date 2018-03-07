@@ -50,7 +50,7 @@
                 var hacker_rank = jQuery.parseJSON(result['hackerrank_status']);
                 var sum=0;
                 var hack_table='';
-                var hack_head ='<tr>'+'<th>'+'Date'+'</th>'+'<th>'+"No.Of.Problems Solved"+'</th>'+'</tr>';
+                var hack_head ='<tr>'+'<th>'+'Date'+'</th>'+'<th>'+"No.Of.Problems"+'</th>'+'</tr>';
                 for(key in hacker_rank){
                     sum += parseInt(hacker_rank[key]);
                     
@@ -63,18 +63,24 @@
                                         '<td>Total</td>'+
                                         '<td>'+sum+ '</td>' +
                                 '</tr>';
-                var git_hub = jQuery.parseJSON(result['github_status']);
-                var git_table='';
-                //console.log(git_hub[113569281]['created_at']);
                 var git_head ='<tr>'+'<th>'+'Repo Name'+'</th>'+'<th>'+"Created Date"+'</th>'+'<th>'+"Pushed Date"+'</th>'+'</tr>';
-                for(key in git_hub){
-                    //console.log(git_hub[key]['name'],git_hub[key]['created_at'],git_hub[key]['pushed_at']);
-                    git_table += '<tr>' + 
+                try{
+                    var git_hub = jQuery.parseJSON(result['github_status']);
+                    var git_table='';
+                    //console.log(git_hub[113569281]['created_at']);
+                    
+                    for(key in git_hub){
+                        //console.log(git_hub[key]['name'],git_hub[key]['created_at'],git_hub[key]['pushed_at']);
+                        git_table += '<tr>' + 
                                     '<td>' + git_hub[key]['name'] + '</td>'+
                                     '<td>' + git_hub[key]['created_at'] + '</td>'+
                                     '<td>' + git_hub[key]['pushed_at'] + '</td>'+
                             '</tr>';
-                    }
+                        }
+            }
+                catch(err){
+                    git_table = "<tr><td colspan=3 style='text-align:center'>no data available</td></tr>";
+            }
                 $(".hackerrank").html(hack_head+hack_table);
                 $(".github").html(git_head+git_table);
                     }
