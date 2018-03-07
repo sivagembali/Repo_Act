@@ -142,6 +142,7 @@ def store_data_to_database():
         linkedinid = line_data[9]
         save_performance_to_database.insert_data(name,password,email,mobile,college,gender,batch,location,hackerrankid,githubid,linkedinid)
         #print(email)
+    file_access.close()
     return "success"
     #print(file_data_lines[37])
 #store_data_to_database()

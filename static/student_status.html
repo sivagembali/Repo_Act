@@ -14,10 +14,11 @@
            user_data = JSON.parse(data);
            //console.log(typeof(user_data));
            table_data = '';
-           table_header = '<tr><th>User ID</th><th>Name</th><th>Batch</th><th>Locatoin</th><th>Problems Solved</th></tr>';
+           table_header = '<tr><th>User ID</th><th>Name</th><th>Batch</th><th>Locatoin</th><th>Number of Problems</th></tr>';
            for(key in user_data){
                //console.log(user_data[key]['name']);
-               table_data = table_data + '<tr><td>'+key+'</td><td>'+user_data[key]['name']+'</td><td>'+user_data[key]['batch']+'</td><td>'+user_data[key]['location']+'</td><td>'+user_data[key]['hackerrank_status']+'</td></tr>';
+               if(user_data[key]['hackerrank_status']!='no data')
+                   table_data = table_data + '<tr><td>'+key+'</td><td>'+user_data[key]['name']+'</td><td>'+user_data[key]['batch']+'</td><td>'+user_data[key]['location']+'</td><td>'+user_data[key]['hackerrank_status']+'</td></tr>';
            }
            
            
