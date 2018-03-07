@@ -71,11 +71,14 @@ def get_snumber_from_studentperformance_table():
     database_connection.close()
     return resultant_data
 
+
+
+
 #Method to check email exist in the database or not if exist returns student info(foreign key value) of type dictionary
 def check_email_exist_or_not(email):
     database_connection = sqlite3.connect('userdatabase.db')
     data_cursor = database_connection.cursor()
-    data_cursor = database_connection.execute("SELECT USERID FROM STUDENTREGISTRATION WHERE EMAIL='%s'" % email)
+    data_cursor = database_connection.execute("SELECT USERID FROM STUDENTREGISTRATION WHERE EMAIL=? OR MOBILE=? ",(email,email))
     resultant_data = data_cursor.fetchall()
     result = {}
     for row in resultant_data:
