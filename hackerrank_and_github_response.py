@@ -41,6 +41,16 @@ def get_data(user_id,hackerrank_id,github_id):
     hackerrank_and_github_data ['userid']= user_id
     hackerrank_and_github_data ['hackerrank_data'] = get_hackerrank_data(hackerrank_id)
     hackerrank_and_github_data ['github_data'] = get_github_data(github_id)
+    try:
+        sum_data = 0
+        dict_data =json.loads(hackerrank_and_github_data ['hackerrank_data'])
+        if(type(dict_data) is dict):
+            for key in dict_data.keys():
+                sum_data = sum_data + int(dict_data[key])
+            #print(type(int(dict_data['2016-07-22'])))
+            hackerrank_and_github_data ['hackerrank_problems']=str(sum_data)
+    except Exception as exc:
+        hackerrank_and_github_data ['hackerrank_problems']="no data"
     return hackerrank_and_github_data
     
 #print(get_data(1,'sivagembali','sivagembali'))

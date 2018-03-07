@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def root():
-    return current_app.send_static_file('register.html')
+    return current_app.send_static_file('static/register.html')
 
 @app.route('/login',methods = ['POST'])
 def login():
@@ -164,7 +164,7 @@ def store_csv_data_to_database():
 def students_status_display():
     database_connection = sqlite3.connect('userdatabase.db')
     data_cursor = database_connection.cursor()
-    result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.batch,studentregistration.location,studentperformance.hackerrankid,studentperformance.hackerrank_status,studentperformance.github_status from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
+    result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.batch,studentregistration.location,studentperformance.hackerrank_problems,studentperformance.hackerrank_status,studentperformance.github_status from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
     result_data_set={}
     result_data = result_cursor.fetchall()
     for row in result_data:
@@ -173,14 +173,10 @@ def students_status_display():
         result_data_set[row_id]['name'] = row[1].lower()
         result_data_set[row_id]['batch'] = row[2]
         result_data_set[row_id]['location'] = row[3]
-        hackerrankid = row[4]
-        result_data_set[row_id]['hackerrank_status'] = get_hack_data(hackerrankid)
-    print(result_data_set)
+        result_data_set[row_id]['hackerrank_status'] = row[4]
+    #print(result_data_set)
     return json.dumps(result_data_set)
     
-
-    
-
 
 if __name__ == '__main__':
    app.run(debug=True)

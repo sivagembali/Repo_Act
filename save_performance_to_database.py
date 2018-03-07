@@ -6,7 +6,8 @@ def save_u_p_data(hackerrank_github_data):
     user_id = hackerrank_github_data['userid']
     hackerrank_info = hackerrank_github_data['hackerrank_data']
     github_info = hackerrank_github_data['github_data']
-    database_connection.execute("UPDATE STUDENTPERFORMANCE SET HACKERRANK_STATUS=?,GITHUB_STATUS=? WHERE USERID = ?",(hackerrank_info,github_info,user_id))
+    hackerrank_problems = hackerrank_github_data['hackerrank_problems']
+    database_connection.execute("UPDATE STUDENTPERFORMANCE SET HACKERRANK_STATUS=?,GITHUB_STATUS=?,HACKERRANK_PROBLEMS=? WHERE USERID = ?",(hackerrank_info,github_info,hackerrank_problems,user_id))
     database_connection.commit()
     database_connection.close()
     #print("Successfully Updated")
@@ -35,7 +36,7 @@ def insert_data(name,password,email,mobile,college,gender,batch,location,hackerr
         database_connection.execute(insertion_query,user_details)
         database_connection.commit()
     else:
-        database_connection.execute('''CREATE TABLE STUDENTPERFORMANCE(S_NUMBER INTEGER PRIMARY KEY ,HACKERRANKID TEXT,GITHUBID TEXT,HACKERRANK_STATUS TEXT,GITHUB_STATUS TEXT,LINKEDINID TEXT,STACKOVERFLOWID TEXT,USERID INTEGER,FOREIGN KEY (USERID) REFERENCES STUDENTREGISTRATION(USERID) )''')
+        database_connection.execute('''CREATE TABLE STUDENTPERFORMANCE(S_NUMBER INTEGER PRIMARY KEY ,HACKERRANKID TEXT,GITHUBID TEXT,HACKERRANK_STATUS TEXT,HACKERRANK_PROBLEMS TEXT,GITHUB_STATUS TEXT,LINKEDINID TEXT,STACKOVERFLOWID TEXT,USERID INTEGER,FOREIGN KEY (USERID) REFERENCES STUDENTREGISTRATION(USERID) )''')
         student_info = check_email_exist_or_not(email)
         #print(student_info['studentinfo'])
         value = student_info['userid']
