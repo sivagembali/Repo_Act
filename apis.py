@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def root():
-    return current_app.send_static_file('/static/register.html')
+    return current_app.send_static_file('register.html')
 
 @app.route('/login',methods = ['POST'])
 def login():
