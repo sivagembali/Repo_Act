@@ -12,6 +12,13 @@ def get_hackerrank_data(hackerrank_id):
         return hackerrank_data_type_json_string
     except Exception as exc:
         return "No Data Available"
+
+    
+def get_hackerrank_data_from_database(hackerrank_id):
+    result = save_performance_to_database.get_hack_data_from_db(hackerrank_id)
+    print(result)
+    
+    
     
 #print(get_hackerrank_data("kittusairam"))
 #method to get data from url link with github_id and returns a json string

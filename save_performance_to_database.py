@@ -114,6 +114,8 @@ def get_student_github_hackerrank_status(student_info):
         result_status['github_status']=row[1]
     return result_status
     
+
+#def get_hack_data_from_db    
     
 def get_all_students_data():
     database_connection = sqlite3.connect('userdatabase.db')

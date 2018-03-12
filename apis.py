@@ -1,5 +1,6 @@
 import sqlite3
 import json
+import datetime
 import hackerrank_and_github_response
 from flask import Flask, redirect, url_for, request,current_app
 app = Flask(__name__)
@@ -105,7 +106,7 @@ def students_data():
     result = hackerrank_and_github_response.get_students_data()
     return json.dumps(result)
 
-#method to get single user performance in hackerrank
+#method to get single user total performance in hackerrank 
 @app.route('/get_hack_data/<hackerrank_id>')
 def get_hack_data(hackerrank_id):
     sum_data = 0
@@ -121,11 +122,38 @@ def get_hack_data(hackerrank_id):
     except Exception as exc:
         return "no data"
 
-#method to get single user performance in hackerrank
+#print(get_hack_data('yandanagamani52'))    
+#method to get single user weekly performance in hackerrank except final day
+#@app.route('/get_weekly_hack_data/<hackerrank_id>')
+def get_weekly_hack_data(hackerrank_id):
+    sum_data = 0
+    data=hackerrank_and_github_response.get_hackerrank_data(hackerrank_id)
+    try:
+        dict_data =json.loads(data)
+        if(type(dict_data) is dict):
+            result ={}
+            values = list(map(int,list(dict_data.values())))
+            tday = str(datetime.date.today())
+            last_submission_date = list(dict_data.keys())[-1]
+            if(tday==last_submission_date):
+                result['weekly_count'] = sum(values[-8:-1])
+                result['tday_count'] = dict_data[tday]
+            else:
+                result['weekly_count'] = sum(values[-7:])
+                result['tday_count'] = 0
+            return result
+    except Exception as exc:
+        #print(hackerrank_id)
+        return "no data"
+    
+#print(get_weekly_hack_data('baggamvinod'))
+    
+
+#method to get single user performance in github
 @app.route('/get_git_data/<git_id>')
 def get_git_data(git_id):
     result = hackerrank_and_github_response.get_github_data(git_id)
-    print(result)
+    #print(result)
     try:
         dict_data = json.loads(result)
         if(type(dict_data) is dict):
@@ -165,7 +193,7 @@ def store_csv_data_to_database():
 def students_status_display():
     database_connection = sqlite3.connect('userdatabase.db')
     data_cursor = database_connection.cursor()
-    result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.batch,studentregistration.location,studentperformance.hackerrank_problems,studentperformance.hackerrank_status,studentperformance.github_status from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
+    result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.batch,studentregistration.location,studentperformance.hackerrank_problems,studentperformance.hackerrankid,studentperformance.hackerrank_status,studentperformance.github_status from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
     result_data_set={}
     result_data = result_cursor.fetchall()
     for row in result_data:
@@ -175,6 +203,14 @@ def students_status_display():
         result_data_set[row_id]['batch'] = row[2]
         result_data_set[row_id]['location'] = row[3]
         result_data_set[row_id]['hackerrank_status'] = row[4]
+        result_from_weekly_hack_data = get_weekly_hack_data(row[5])
+        if(result_from_weekly_hack_data!="no data"):
+            result_data_set[row_id]['weekly_count'] = result_from_weekly_hack_data['weekly_count']
+            result_data_set[row_id]['tday_count'] = result_from_weekly_hack_data['tday_count']
+        else:
+            result_data_set[row_id]['weekly_count'] =0
+            result_data_set[row_id]['tday_count'] = 0
+
     #print(result_data_set)
     return json.dumps(result_data_set)
     

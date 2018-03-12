@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)https://blackrockdigital.github.io/startbootstrap-round-about/ -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Table sorting and filter-->
+        <!--<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css">
+        -->
+        
+
+    <style>
+        .rounded-circle{
+            border-radius: 50%;
+        }
+        table{
+            width: 100%;
+        }
+        table,th,tr,td{
+            #border: 1px solid black;
+            padding: 20px;
+            text-align: left;
+            border-collapse: collapse;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="./ext/font-awesome/css/font-awesome.min.css">
+    <title>Python Workshops</title>
+    <!-- Bootstrap core CSS -->
+        
+    <link href="./ext/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./css/workshops.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="tablesort.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script> 
+    <script type="text/javascript" src="tablesort.js"></script> 
+            
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-light bg-light fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/">Python Workshops</a>
+        <a class="btn btn-primary" href="/#Upcoming_Workshops"><strong>Join</strong></a>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+  
+
+
+      <!-- Team Members Row -->
+    <section id="participants" class="mt-5">
+      <div class="container">
+      <div class="col-lg-12">
+          <h2 class="my-4 text-center">Workshop Students Current Status</h2>
+        </div>
+
+      <table id="myTable" class="table-sort table-sort-search">
+                     
+
+      </table>
+      </div>
+    </section>
+    
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright © Your Website 2017</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!--<script src="./ext/jquery/jquery.min.js"></script>-->
+    <!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
+    <script src="./ext/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+    // For Demo Purposes
+       
+    </script>
+      
+     <script>
+                                
+        $(document).ready(function(data){
+        $.get('http://127.0.0.1:5000/students_status_display',function(data,status){
+            user_data = JSON.parse(data);
+            //console.log(typeof(user_data));
+            table_data = '';
+            table_header = '<thead><tr><th>User ID</th><th class="table-sort">Name</th><th class="table-sort">Batch</th><th class="table-sort">Location</th><th>Number of Problems</th></tr></thead><tbody>';
+            for(key in user_data){
+               //console.log(user_data[key]['name']);
+               if(user_data[key]['hackerrank_status']!='no data')
+                   table_data = table_data + '<tr><td>'+key+'</td><td>'+user_data[key]['name']+'</td><td>'+user_data[key]['batch']+'</td><td>'+user_data[key]['location']+'</td><td>'+parseInt(user_data[key]['hackerrank_status'])+'</td></tr>';
+            }
+           $("#myTable").html(table_header+table_data+'</tbody>');    
+           //console.log(user_data);
+            
+            $('table.table-sort').tablesort();    
+            
+        });
+        });
+        
+
+        </script>
+
+</body></html>
