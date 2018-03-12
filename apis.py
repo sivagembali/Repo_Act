@@ -3,7 +3,9 @@ import json
 import datetime
 import hackerrank_and_github_response
 from flask import Flask, redirect, url_for, request,current_app
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app,resources=r'/students_status_display')
 
 @app.route('/')
 def root():
