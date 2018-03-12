@@ -13,11 +13,11 @@ def get_hackerrank_data(hackerrank_id):
     except Exception as exc:
         return "No Data Available"
 
-    
+#method to get hackerrank data from database
 def get_hackerrank_data_from_database(hackerrank_id):
     result = save_performance_to_database.get_hack_data_from_db(hackerrank_id)
-    print(result)
-    
+    return result['hackerrank_status']
+#get_hackerrank_data_from_database('sivagembali')
     
     
 #print(get_hackerrank_data("kittusairam"))

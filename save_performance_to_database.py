@@ -1,5 +1,5 @@
 import sqlite3
-
+import json
 #Method to save students hackerrank and github status
 def save_u_p_data(hackerrank_github_data):
     database_connection = sqlite3.connect('userdatabase.db')
@@ -115,8 +115,19 @@ def get_student_github_hackerrank_status(student_info):
     return result_status
     
 
-#def get_hack_data_from_db    
-    
+def get_hack_data_from_db(hackerrank_id):
+    database_connection = sqlite3.connect('userdatabase.db')
+    data_cursor = database_connection.cursor()
+    try:
+        data_cursor = database_connection.execute("SELECT HACKERRANK_STATUS FROM STUDENTPERFORMANCE WHERE  HACKERRANKID='%s'" % hackerrank_id)
+        data = data_cursor.fetchall()
+        result_status = {}
+        for row in data:
+            result_status['hackerrank_status']=row[0]
+        return result_status
+    except Exception as exp:
+        return "Data Not Available"
+
 def get_all_students_data():
     database_connection = sqlite3.connect('userdatabase.db')
     data_cursor = database_connection.cursor()

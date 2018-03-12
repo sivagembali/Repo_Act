@@ -129,26 +129,28 @@ def get_hack_data(hackerrank_id):
 #@app.route('/get_weekly_hack_data/<hackerrank_id>')
 def get_weekly_hack_data(hackerrank_id):
     sum_data = 0
-    data=hackerrank_and_github_response.get_hackerrank_data(hackerrank_id)
+    data=hackerrank_and_github_response.get_hackerrank_data_from_database(hackerrank_id)
     try:
         dict_data =json.loads(data)
         if(type(dict_data) is dict):
             result ={}
-            values = list(map(int,list(dict_data.values())))
-            tday = str(datetime.date.today())
-            last_submission_date = list(dict_data.keys())[-1]
-            if(tday==last_submission_date):
-                result['weekly_count'] = sum(values[-8:-1])
-                result['tday_count'] = dict_data[tday]
+            weekly_count = 0
+            for i in range(7):
+                day = str(datetime.date.today()-datetime.timedelta(days=i))
+                if(day in dict_data.keys()):
+                    weekly_count = weekly_count + int(dict_data[day]) 
+            print(weekly_count)
+            result['weekly_count'] = weekly_count
+            if(str(datetime.date.today()) == list(dict_data.keys())[-1]):
+                result['tday_count'] = dict_data[list(dict_data.keys())[-1]]
             else:
-                result['weekly_count'] = sum(values[-7:])
                 result['tday_count'] = 0
             return result
     except Exception as exc:
         #print(hackerrank_id)
         return "no data"
     
-#print(get_weekly_hack_data('baggamvinod'))
+#print(get_weekly_hack_data('sivagembali'))
     
 
 #method to get single user performance in github
