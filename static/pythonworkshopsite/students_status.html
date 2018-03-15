@@ -8,7 +8,7 @@
             border-radius: 50%;
         }
         table{
-            width: 100%;
+            width: 75%;
         }
         table,th,tr,td{
             #border: 1px solid black;
@@ -88,7 +88,7 @@
             user_data = JSON.parse(data);
             //console.log(user_data);
             table_data = '';
-            table_header = '<thead><tr><th>User ID</th><th class="table-sort">Name</th><th class="table-sort">Batch</th><th class="table-sort">Location</th><th>Today</th><th>Last 7 days</th><th>Number of Problems</th></tr></thead><tbody>';
+            table_header = '<thead><tr><th>User ID</th><th class="table-sort">Name</th><th class="table-sort">Batch</th><th class="table-sort">Location</th><th>Today</th><th>Last 7 days</th><th>Number of Submissions</th></tr></thead><tbody>';
             for(key in user_data){
                //console.log(user_data[key]['name']);
                if(user_data[key]['hackerrank_status']!='no data')

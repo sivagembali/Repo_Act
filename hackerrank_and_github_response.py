@@ -13,6 +13,77 @@ def get_hackerrank_data(hackerrank_id):
     except Exception as exc:
         return "No Data Available"
 
+    
+def hackerrank_url_call(hackerrank_id,cursor=''):
+    try:
+        data = requests.get("https://www.hackerrank.com/rest/hackers/%s/recent_challenges?limit=20&response_version=v2&cursor=%s"%(hackerrank_id, cursor))
+        return json.loads(data.content)
+    except Exception as exc:
+        return 0
+#print(hackerrank_url_call('sivagembali','MTA1NTQ2N3x8MTUxMTI4Njc2My4wfHwxXzEzNTAy'))
+    
+#Method to get data from url link with hackerrank id and returns number of problems solved with problem statements
+def get_hackerrank_problems(hackerrank_id):
+    try:
+        result = {}
+        cursor=''
+        last_page = False
+        list_of_problems=[]
+        status = True
+        st_for_question = True
+        qtn_from_database = 'Exceptions'
+        problems_list = []
+        while(last_page!=True):
+            data = hackerrank_url_call(hackerrank_id,cursor)
+            if(st_for_question == True):
+                st_for_question = False
+                result['recent_problem']= data['models'][0]['name']
+            for item in data['models']:
+                if(item['name']!= qtn_from_database):
+                    list_of_problems.append(item['name'])
+                else:
+                    status = False
+                    break
+            last_page= data['last_page']
+            cursor= data['cursor']
+            if(status == False):
+                break
+        result['problems'] = list_of_problems
+        result['nu_problems'] = len(list_of_problems)
+        #print(result)
+        return result
+    except Exception as exc:
+        return "No Data Available"
+#print(get_hackerrank_problems('sivagembali'))
+
+        
+        
+'''hackerrank_response_dict = hackerrank_url_call(hackerrank_id,cursor)
+        #print("First call:",hackerrank_response_dict)
+        #print(hackerrank_response_dict['models'][0]['created_at'])
+        last_page = hackerrank_response_dict['last_page']
+        cursor = hackerrank_response_dict['cursor']
+        problems_list=hackerrank_response_dict['models']
+        while(last_page!=True):
+            data = requests.get("https://www.hackerrank.com/rest/hackers/%s/recent_challenges?limit=20&response_version=v2&cursor=%s"%(hackerrank_id, cursor))
+            json_data=json.loads(data.content)
+            cursor = json_data['cursor']
+            last_page = json_data['last_page']
+            
+            #while(qtn!=question):
+                
+            
+            
+            problems_list = problems_list + json_data['models']
+        #print(problems_list)
+        #print(len(problems_list))
+        hackerrank_data_type_json_string = json.dumps(hackerrank_response_dict)
+        #return hackerrank_data_type_json_string'''
+    
+        
+    
+    
+    
 #method to get hackerrank data from database
 def get_hackerrank_data_from_database(hackerrank_id):
     result = save_performance_to_database.get_hack_data_from_db(hackerrank_id)
@@ -56,9 +127,9 @@ def get_data(user_id,hackerrank_id,github_id):
             for key in dict_data.keys():
                 sum_data = sum_data + int(dict_data[key])
             #print(type(int(dict_data['2016-07-22'])))
-            hackerrank_and_github_data ['hackerrank_problems']=str(sum_data)
+            hackerrank_and_github_data ['hackerrank_problems']= sum_data
     except Exception as exc:
-        hackerrank_and_github_data ['hackerrank_problems']="no data"
+        hackerrank_and_github_data ['hackerrank_problems']= 0
     return hackerrank_and_github_data
     
 #print(get_data(1,'sivagembali','sivagembali'))

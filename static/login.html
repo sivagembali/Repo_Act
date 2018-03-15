@@ -89,7 +89,7 @@
         $.post("../login",input_data,function(data, status){
             if(data == "Successfully Loggedin"){
                 alert("Data:"+data);
-                console.log(data);
+                //console.log(data);
                 setTimeout("pageRedirect()", 500);
             }else{
                 alert("Data:"+data);

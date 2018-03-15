@@ -36,7 +36,7 @@ def insert_data(name,password,email,mobile,college,gender,batch,location,hackerr
         database_connection.execute(insertion_query,user_details)
         database_connection.commit()
     else:
-        database_connection.execute('''CREATE TABLE STUDENTPERFORMANCE(S_NUMBER INTEGER PRIMARY KEY ,HACKERRANKID TEXT,GITHUBID TEXT,HACKERRANK_STATUS TEXT,HACKERRANK_PROBLEMS TEXT,GITHUB_STATUS TEXT,LINKEDINID TEXT,STACKOVERFLOWID TEXT,USERID INTEGER,FOREIGN KEY (USERID) REFERENCES STUDENTREGISTRATION(USERID) )''')
+        database_connection.execute('''CREATE TABLE STUDENTPERFORMANCE(S_NUMBER INTEGER PRIMARY KEY ,HACKERRANKID TEXT,GITHUBID TEXT,HACKERRANK_STATUS TEXT,HACKERRANK_PROBLEMS INTEGER,GITHUB_STATUS TEXT,LINKEDINID TEXT,STACKOVERFLOWID TEXT,USERID INTEGER,FOREIGN KEY (USERID) REFERENCES STUDENTREGISTRATION(USERID) )''')
         student_info = check_email_exist_or_not(email)
         #print(student_info['studentinfo'])
         value = student_info['userid']

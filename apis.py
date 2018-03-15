@@ -139,7 +139,7 @@ def get_weekly_hack_data(hackerrank_id):
                 day = str(datetime.date.today()-datetime.timedelta(days=i))
                 if(day in dict_data.keys()):
                     weekly_count = weekly_count + int(dict_data[day]) 
-            print(weekly_count)
+            #print(weekly_count)
             result['weekly_count'] = weekly_count
             if(str(datetime.date.today()) == list(dict_data.keys())[-1]):
                 result['tday_count'] = dict_data[list(dict_data.keys())[-1]]
