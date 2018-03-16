@@ -1,4 +1,5 @@
 import sqlite3
+import urllib 
 import json
 import datetime
 import hackerrank_and_github_response
@@ -197,7 +198,7 @@ def store_csv_data_to_database():
 def students_status_display():
     database_connection = sqlite3.connect('userdatabase.db')
     data_cursor = database_connection.cursor()
-    result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.batch,studentregistration.location,studentperformance.hackerrank_problems,studentperformance.hackerrankid,studentperformance.hackerrank_status,studentperformance.github_status from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
+    result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.batch,studentregistration.location,studentperformance.hackerrank_submissions,studentperformance.hackerrankid,studentperformance.hackerrank_status,studentperformance.github_status,studentperformance.hackerrank_problems from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
     result_data_set={}
     result_data = result_cursor.fetchall()
     for row in result_data:
@@ -206,7 +207,7 @@ def students_status_display():
         result_data_set[row_id]['name'] = row[1].lower()
         result_data_set[row_id]['batch'] = row[2]
         result_data_set[row_id]['location'] = row[3]
-        result_data_set[row_id]['hackerrank_status'] = row[4]
+        result_data_set[row_id]['hackerrank_submissions'] = row[4]
         result_from_weekly_hack_data = get_weekly_hack_data(row[5])
         if(result_from_weekly_hack_data!="no data"):
             result_data_set[row_id]['weekly_count'] = result_from_weekly_hack_data['weekly_count']
@@ -214,10 +215,36 @@ def students_status_display():
         else:
             result_data_set[row_id]['weekly_count'] =0
             result_data_set[row_id]['tday_count'] = 0
-
+        hackerank_problems_data = json.loads(row[8])
+        result_data_set[row_id]['hackerrank_problems'] = hackerank_problems_data['problems_count']
+        if(hackerank_problems_data['problems_count'] == 0):
+            print(row[1],":",hackerank_problems_data['problems_count'])
     #print(result_data_set)
     return json.dumps(result_data_set)
+#method to send messages
+@app.route('/messages')
+def messages():
     
+    authkey = "180622Acufr0Tf6Fg559ef6f69" # Your authentication key.
+    mobiles = "9705707580,8978098160" # Multiple mobiles numbers separated by comma.
+    message = "Status Demo" # Your message to send.
+    sender = "MSGIND" # Sender ID,While using route4 sender id should be 6 characters long.
+    route = "4" # Define route
+    # Prepare you post parameters
+    values = {
+             'authkey' : authkey,
+             'mobiles' : mobiles,
+             'message' : message,
+             'sender' : sender,
+             'route' : route
+             }
+    url = "https://control.msg91.com/api/sendhttp.php" # API URL
+    postdata = urllib.parse.urlencode(values) # URL encoding the data here.
+    postdata = postdata.encode('utf-8')
+    req = urllib.request.Request(url,postdata)
+    response = urllib.request.urlopen(req)
+    output = response.read() # Get Response
+    return "success"
 
 if __name__ == '__main__':
    app.run(debug=True)

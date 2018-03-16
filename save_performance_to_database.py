@@ -7,13 +7,28 @@ def save_u_p_data(hackerrank_github_data):
     hackerrank_info = hackerrank_github_data['hackerrank_data']
     github_info = hackerrank_github_data['github_data']
     hackerrank_problems = hackerrank_github_data['hackerrank_problems']
-    database_connection.execute("UPDATE STUDENTPERFORMANCE SET HACKERRANK_STATUS=?,GITHUB_STATUS=?,HACKERRANK_PROBLEMS=? WHERE USERID = ?",(hackerrank_info,github_info,hackerrank_problems,user_id))
+    hackerrank_submissions = hackerrank_github_data['hackerrank_submissions']
+    database_connection.execute("UPDATE STUDENTPERFORMANCE SET HACKERRANK_STATUS=?,GITHUB_STATUS=?,HACKERRANK_PROBLEMS=?,HACKERRANK_SUBMISSIONS=? WHERE USERID = ?",(hackerrank_info,github_info,hackerrank_problems,hackerrank_submissions,user_id))
     database_connection.commit()
     database_connection.close()
     #print("Successfully Updated")
 
+#Method to get previous hackerrank problems and latest question
+def get_hackerrank_problems_and_latest_qtn(hackerrank_id):
+    database_connection = sqlite3.connect('userdatabase.db')
+    data_cursor = database_connection.cursor()
+    result_cursor = data_cursor.execute("SELECT HACKERRANK_PROBLEMS FROM STUDENTPERFORMANCE WHERE HACKERRANKID = '%s' "% hackerrank_id)
+    result_data = result_cursor.fetchall()
+    for row in result_data:
+        result = row[0]
+    if(result == None):
+        result = json.dumps({'problems_list':[],'problems_count':0,'recent_problem':''})
+    return result
+#print(get_hackerrank_problems_and_latest_qtn('sivagembali'))
+    
 #Method to insert data into tables
 def insert_data(name,password,email,mobile,college,gender,batch,location,hackerrankid,githubid,linkedinid):
+    print(name,password,email,mobile,college,gender,batch,location,hackerrankid,githubid,linkedinid)
     database_connection = sqlite3.connect('userdatabase.db')
     if(table_exists(database_connection,'STUDENTREGISTRATION')):
         user_details = (name,password,email,mobile,college,gender,batch,location)
@@ -31,21 +46,23 @@ def insert_data(name,password,email,mobile,college,gender,batch,location,hackerr
         student_info = check_email_exist_or_not(email)
         #print(student_info['studentinfo'])
         value = student_info['userid']
-        user_details = (hackerrankid,githubid,linkedinid,value)
-        insertion_query='''INSERT INTO STUDENTPERFORMANCE (HACKERRANKID,GITHUBID,LINKEDINID,USERID) VALUES(?,?,?,?)'''
+        hackerrank_problems = json.dumps({'problems_list':[],'problems_count':0,'recent_problem':''})
+        user_details = (hackerrankid,githubid,hackerrank_problems,linkedinid,value)
+        insertion_query='''INSERT INTO STUDENTPERFORMANCE (HACKERRANKID,GITHUBID,HACKERRANK_PROBLEMS,LINKEDINID,USERID) VALUES(?,?,?,?,?)'''
         database_connection.execute(insertion_query,user_details)
         database_connection.commit()
     else:
-        database_connection.execute('''CREATE TABLE STUDENTPERFORMANCE(S_NUMBER INTEGER PRIMARY KEY ,HACKERRANKID TEXT,GITHUBID TEXT,HACKERRANK_STATUS TEXT,HACKERRANK_PROBLEMS INTEGER,GITHUB_STATUS TEXT,LINKEDINID TEXT,STACKOVERFLOWID TEXT,USERID INTEGER,FOREIGN KEY (USERID) REFERENCES STUDENTREGISTRATION(USERID) )''')
+        database_connection.execute('''CREATE TABLE STUDENTPERFORMANCE(S_NUMBER INTEGER PRIMARY KEY ,HACKERRANKID TEXT,GITHUBID TEXT,HACKERRANK_STATUS TEXT,HACKERRANK_SUBMISSIONS TEXT,HACKERRANK_PROBLEMS INTEGER,GITHUB_STATUS TEXT,LINKEDINID TEXT,STACKOVERFLOWID TEXT,USERID INTEGER,FOREIGN KEY (USERID) REFERENCES STUDENTREGISTRATION(USERID) )''')
         student_info = check_email_exist_or_not(email)
         #print(student_info['studentinfo'])
         value = student_info['userid']
-        user_details = (1,hackerrankid,githubid,linkedinid,value)
-        insertion_query='''INSERT INTO STUDENTPERFORMANCE (S_NUMBER,HACKERRANKID,GITHUBID,LINKEDINID,USERID) VALUES(?,?,?,?,?)'''
+        hackerrank_problems = json.dumps({'problems_list':[],'problems_count':0,'recent_problem':''})
+        user_details = (1,hackerrankid,githubid,hackerrank_problems,linkedinid,value)
+        insertion_query='''INSERT INTO STUDENTPERFORMANCE (S_NUMBER,HACKERRANKID,GITHUBID,HACKERRANK_PROBLEMS,LINKEDINID,USERID) VALUES(?,?,?,?,?,?)'''
         database_connection.execute(insertion_query,user_details)
         database_connection.commit()
     database_connection.close()
-
+#insert_data('Lakkimsetty Pavani','pavani','pavanilakkimsetty@gmail.com','9133610848','Gayatri Vidya Parishad college of engineering(A)','female','Feb-18','vizag','pavanilakkimset1','lakkimsettypavani','')
 #Method to retrive data from database returns a json 
 def get_ids_studentperformance(userid):
     database_connection = sqlite3.connect('userdatabase.db')
