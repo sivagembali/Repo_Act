@@ -91,7 +91,7 @@
             table_data = '';
             table_header = '<thead><tr><th>User ID</th><th class="table-sort">Name</th><th class="table-sort">Batch</th><th class="table-sort">Location</th><th>Today</th><th>Last 7 days</th><th>Number of Submissions</th><th>Number of Problems</th></tr></thead><tbody>';
             for(key in user_data){
-               //console.log(user_data[key]['name']);
+               console.log(user_data[key]['name']);
                if(user_data[key]['hackerrank_submissions']!='no data')
                    table_data = table_data + '<tr><td>'+key+'</td><td>'+user_data[key]['name']+'</td><td>'+user_data[key]['batch']+'</td><td>'+user_data[key]['location']+'</td><td>'+user_data[key]['tday_count']+'</td><td>'+user_data[key]['weekly_count']+'</td><td>'+parseInt(user_data[key]['hackerrank_submissions'])+'</td><td>'+parseInt(user_data[key]['hackerrank_problems'])+'</td></tr>';
             }

@@ -217,8 +217,8 @@ def students_status_display():
             result_data_set[row_id]['tday_count'] = 0
         hackerank_problems_data = json.loads(row[8])
         result_data_set[row_id]['hackerrank_problems'] = hackerank_problems_data['problems_count']
-        if(hackerank_problems_data['problems_count'] == 0):
-            print(row[1],":",hackerank_problems_data['problems_count'])
+        #if(hackerank_problems_data['problems_count'] == 0):
+            #print(row[1],":",hackerank_problems_data['problems_count'])
     #print(result_data_set)
     return json.dumps(result_data_set)
 #method to send messages
