@@ -195,6 +195,9 @@ def store_csv_data_to_database():
 #method to show students current status
 @app.route('/students_status_display')
 def students_status_display():
+    #file_name = str(datetime.date.today())+".csv"
+    #file_access = open(file_name,'a')
+    #file_write = file_access.write("Name,Number of Problems,location,\n")
     database_connection = sqlite3.connect('userdatabase.db')
     data_cursor = database_connection.cursor()
     result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.batch,studentregistration.location,studentperformance.hackerrank_submissions,studentperformance.hackerrankid,studentperformance.hackerrank_status,studentperformance.github_status,studentperformance.hackerrank_problems from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
@@ -216,9 +219,12 @@ def students_status_display():
             result_data_set[row_id]['tday_count'] = 0
         hackerank_problems_data = json.loads(row[8])
         result_data_set[row_id]['hackerrank_problems'] = hackerank_problems_data['problems_count']
+        #if(hackerank_problems_data['problems_count'] > 66 ):
+            #file_access.write(row[1]+","+str(hackerank_problems_data['problems_count'])+","+row[3]+"\n")
         #if(hackerank_problems_data['problems_count'] == 0):
             #print(row[1],":",hackerank_problems_data['problems_count'])
-    #print(result_data_set)
+        #print(result_data_set)
+    #file_access.close()
     return json.dumps(result_data_set)
 
 

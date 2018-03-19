@@ -57,7 +57,7 @@ def get_hackerrank_problems(hackerrank_id):
         #print(result)
         return json.dumps(result)
     except Exception as exc:
-        print("Exception",exc)
+        #print("Exception",exc)
         return json.dumps({'problems_list':[],'problems_count':0,'recent_problem':''})
 #print(get_hackerrank_problems('udayasriap'))
 
