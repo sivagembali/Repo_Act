@@ -182,7 +182,7 @@ def get_details():
         if(data['problems_count']>=66 and row[7]!='sept2017' and row[5]!='null' and row[5]!=None):
             row_id = row[0]
             result_data_set[row_id]={}
-            result_data_set[row_id]['student_name']= row[1]
+            result_data_set[row_id]['student_name']= row[1].title()
             result_data_set[row_id]['gender']= row[2]
             result_data_set[row_id]['hackerrankid']= row[3]
             result_data_set[row_id]['githubid']= row[4]
