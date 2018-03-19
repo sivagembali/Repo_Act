@@ -6,6 +6,7 @@ from flask import Flask, redirect, url_for, request,current_app
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app,resources=r'/students_status_display')
+CORS(app,resources=r'/get_details')
 
 @app.route('/')
 def root():
@@ -173,17 +174,19 @@ def get_git_data(git_id):
 def get_details():
     database_connection = sqlite3.connect('userdatabase.db')
     data_cursor = database_connection.cursor()
-    result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.gender,studentperformance.hackerrankid,studentperformance.githubid,studentperformance.linkedinid from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
+    result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.gender,studentperformance.hackerrankid,studentperformance.githubid,studentperformance.linkedinid,studentperformance.hackerrank_problems,studentregistration.batch from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
     result_data_set={}
     result_data = result_cursor.fetchall()
     for row in result_data:
-        row_id = row[0]
-        result_data_set[row_id]={}
-        result_data_set[row_id]['student_name']= row[1]
-        result_data_set[row_id]['gender']= row[2]
-        result_data_set[row_id]['hackerrankid']= row[3]
-        result_data_set[row_id]['githubid']= row[4]
-        result_data_set[row_id]['linkedinid']= row[5]
+        data = json.loads(row[6])
+        if(data['problems_count']>=66 and row[7]!='sept2017' and row[5]!='null' and row[5]!=None):
+            row_id = row[0]
+            result_data_set[row_id]={}
+            result_data_set[row_id]['student_name']= row[1]
+            result_data_set[row_id]['gender']= row[2]
+            result_data_set[row_id]['hackerrankid']= row[3]
+            result_data_set[row_id]['githubid']= row[4]
+            result_data_set[row_id]['linkedinid']= row[5]
     return json.dumps(result_data_set)
 
 #method to read data from csv and store it in a database
@@ -219,7 +222,7 @@ def students_status_display():
             result_data_set[row_id]['tday_count'] = 0
         hackerank_problems_data = json.loads(row[8])
         result_data_set[row_id]['hackerrank_problems'] = hackerank_problems_data['problems_count']
-        #if(hackerank_problems_data['problems_count'] > 66 ):
+        #if(hackerank_problems_data['problems_count'] >= 66):
             #file_access.write(row[1]+","+str(hackerank_problems_data['problems_count'])+","+row[3]+"\n")
         #if(hackerank_problems_data['problems_count'] == 0):
             #print(row[1],":",hackerank_problems_data['problems_count'])
