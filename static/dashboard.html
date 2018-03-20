@@ -65,7 +65,9 @@
                                 '</tr>';
                 var git_head ='<tr>'+'<th>'+'Repo Name'+'</th>'+'<th>'+"Created Date"+'</th>'+'<th>'+"Pushed Date"+'</th>'+'</tr>';
                 try{
-                    var git_hub = jQuery.parseJSON(result['github_status']);
+                    
+                    var total_github_data = jQuery.parseJSON(result['github_status']); 
+                    var git_hub = total_github_data['git_data'];
                     var git_table='';
                     //console.log(git_hub[113569281]['created_at']);
                     

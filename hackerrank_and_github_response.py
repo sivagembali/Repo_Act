@@ -69,8 +69,7 @@ def get_hackerrank_data_from_database(hackerrank_id):
 #get_hackerrank_data_from_database('sivagembali')
     
 
-#This is currently stopped if u want to change it to working condition remove the comment in url call    
-    
+#method currently not working uncomment the url call
 #print(get_hackerrank_data("kittusairam"))
 #method to get data from url link with github_id and returns a json string
 def get_github_data(github_id):
@@ -88,11 +87,15 @@ def get_github_data(github_id):
             repo_data['created_at']= github_response_data[repository_data]['created_at']
             repo_data['pushed_at'] = github_response_data[repository_data]['pushed_at']
             github_data[repo_id]= repo_data
-        github_data_type_json_string = json.dumps(github_data)
+        repo_count = len(list(github_data.keys()))
+        total_github_data = {'git_data':github_data,'repo_count':repo_count}
+        github_data_type_json_string = json.dumps(total_github_data)
+        #print(repo_count)
+        #print("git dataa:",github_data_type_json_string)
         return github_data_type_json_string
     except Exception as exc:
-        return "No Data Available"
-#print(get_github_data('sivagembali'))
+        return json.dumps({'git_data':"No Data Available",'repo_count':0,'problem':'Error in getting data'})
+#print(get_github_data('rajeunoia'))
 
 #Method to get hackerrank and github data    
 def get_data(user_id,hackerrank_id,github_id):

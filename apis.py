@@ -168,18 +168,20 @@ def get_git_data(git_id):
 
     
 #method to generate dynamic student details
-#result will be in this format{1:{'student_name':'g siva prasad','gender':'male','hackerrankid':'sivagembali','githubid':'sivagembali','linkedinid':'sivagembali'}}
+#result will be in this format{1:{'student_name':'g siva prasad','gender':'male','hackerrankid':'sivagembali','githubid':'sivagembali','linkedinid':'sivagembali','problems_count':157,'repo_count':8}}
 
 @app.route('/get_details')
 def get_details():
     database_connection = sqlite3.connect('userdatabase.db')
     data_cursor = database_connection.cursor()
-    result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.gender,studentperformance.hackerrankid,studentperformance.githubid,studentperformance.linkedinid,studentperformance.hackerrank_problems,studentregistration.batch from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
+    result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.gender,studentperformance.hackerrankid,studentperformance.githubid,studentperformance.linkedinid,studentperformance.hackerrank_problems,studentregistration.batch,studentperformance.github_status from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
     result_data_set={}
     result_data = result_cursor.fetchall()
     for row in result_data:
-        data = json.loads(row[6])
-        if(data['problems_count']>=66 and row[7]!='sept2017' and row[5]!='null' and row[5]!=None):
+        hack_data = json.loads(row[6])
+        git_data = json.loads(row[8])
+        # and row[5]!='null' and row[5]!=None
+        if(hack_data['problems_count']>=66 and row[7]!='sept2017'):
             row_id = row[0]
             result_data_set[row_id]={}
             result_data_set[row_id]['student_name']= row[1].title()
@@ -187,13 +189,17 @@ def get_details():
             result_data_set[row_id]['hackerrankid']= row[3]
             result_data_set[row_id]['githubid']= row[4]
             result_data_set[row_id]['linkedinid']= row[5]
+            result_data_set[row_id]['problems_count'] = hack_data['problems_count']
+            result_data_set[row_id]['repo_count'] = git_data['repo_count']
+    #print(result_data_set)
     return json.dumps(result_data_set)
-
+#print(get_details())
 #method to read data from csv and store it in a database
 @app.route('/store_students_data')    
 def store_csv_data_to_database():
     result = hackerrank_and_github_response.store_data_to_database()
     return result   
+
 
 #method to show students current status
 @app.route('/students_status_display')
@@ -232,4 +238,4 @@ def students_status_display():
 
 
 if __name__ == '__main__':
-   app.run(debug=True)
+    app.run(debug=True)
