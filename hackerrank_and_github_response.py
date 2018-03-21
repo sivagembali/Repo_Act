@@ -77,7 +77,7 @@ def get_github_data(github_id):
     #print(github_id)
     try:
         github_data = {}
-        #github_response_type_byte = requests.get("https://api.github.com/users/%s/repos"%github_id)
+        github_response_type_byte = requests.get("https://api.github.com/users/%s/repos"%github_id)
         github_response_data = json.loads(github_response_type_byte.content)
         #print(github_response_data)
         for repository_data in range(len(github_response_data)):
