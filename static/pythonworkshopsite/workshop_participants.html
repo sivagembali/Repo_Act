@@ -16,7 +16,8 @@
                         $(".display").text("No Data Available");
                         }
                     else{
-                        var show_details="";    
+                        var show_details_feb2018 = "";
+                        var show_details_sept2017="";    
                         var result = jQuery.parseJSON(data);
                         for(key in result){
                             hackerrank_problems = result[key]['problems_count'];
@@ -25,6 +26,8 @@
                             hackerrank_id = result[key]['hackerrankid'];
                             github_id = result[key]['githubid'];
                             linkedin_id = result[key]['linkedinid'];
+                            job_status = result[key]['job_status'];
+                            batch = result[key]['batch']
                             if(linkedin_id!=null){
                                 linkedin_src = "'img/icons/tick.ico'";
                             }
@@ -38,14 +41,26 @@
                             else{
                                 img_src = "'img/female.png'";
                             }
-                            show_details +=    "<div class='col-lg-4 col-sm-6 text-center mb-4'>"+
+                            if(batch == 'Sept2017'){
+                                show_details_sept2017 +=    "<div class='col-lg-4 col-sm-6 text-center mb-4'>"+
           "<img class='rounded-circle img-fluid d-block mx-auto' src="+img_src+"width='130px' height='130px' alt=''><br>"+
-          "<h5>"+student_name +"</h5>"+
+          "<h5>"+student_name +"</h5><p>"+job_status+"</p>"+
           "<p><a href='https://www.hackerrank.com/"+hackerrank_id+"'><img src='img/hackerrank_fa.ico' width='24px' height='24px' ></a>&nbsp;&nbsp;"+
              "<a href='https://github.com/"+github_id+"'><i class='fa fa-github fa-3' aria-hidden='true'></i></a>&nbsp;&nbsp;"+
              "<a href='https://www.linkedin.com/in/"+linkedin_id+"'><i class='fa fa-linkedin fa-3' aria-hidden='true'></i></a></br><pre>"+hackerrank_problems+"  "+github_repo+"  <img src="+linkedin_src+" width='24px' height='24px' ></pre></p></div>";
                             }
-                        $(".row").html(show_details);
+                            if(batch == 'Feb2018'){
+                                show_details_feb2018 +=    "<div class='col-lg-4 col-sm-6 text-center mb-4'>"+
+          "<img class='rounded-circle img-fluid d-block mx-auto' src="+img_src+"width='130px' height='130px' alt=''><br>"+
+          "<h5>"+student_name +"</h5><p>"+job_status+"</p>"+
+          "<p><a href='https://www.hackerrank.com/"+hackerrank_id+"'><img src='img/hackerrank_fa.ico' width='24px' height='24px' ></a>&nbsp;&nbsp;"+
+             "<a href='https://github.com/"+github_id+"'><i class='fa fa-github fa-3' aria-hidden='true'></i></a>&nbsp;&nbsp;"+
+             "<a href='https://www.linkedin.com/in/"+linkedin_id+"'><i class='fa fa-linkedin fa-3' aria-hidden='true'></i></a></br><pre>"+hackerrank_problems+"  "+github_repo+"  <img src="+linkedin_src+" width='24px' height='24px' ></pre></p></div>";
+                            }
+                            
+                            }
+                        $("#feb_batch").html(show_details_feb2018);
+                        $("#sept_batch").html(show_details_sept2017);
                     }
                 });
             });
@@ -86,7 +101,8 @@
           <div class="col-lg-12"><br/>
           <h2 class="my-4 text-center">Workshop Participants</h2>
             </div>
-      <div class="row">
+          <br><p style="font-size: 20px"><b>Feb-2018 Batch:</b></p>
+      <div class="row" id="feb_batch">
                <!-- <div class="col-lg-4 col-sm-6 text-center mb-4">
           <img class="rounded-circle img-fluid d-block mx-auto" src="img/male.png" width="130px" height="130px" alt=""><br>
           <h5>B Uday Bhaskar</h5>
@@ -95,6 +111,11 @@
         
 
       </div>
+          <br>
+    <p style="font-size: 20px"><b>Sept-2017 Batch</b></p>    
+    <div class="row" id="sept_batch">
+          
+          </div>
       </div>
     </section>
     

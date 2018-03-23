@@ -174,14 +174,15 @@ def get_git_data(git_id):
 def get_details():
     database_connection = sqlite3.connect('userdatabase.db')
     data_cursor = database_connection.cursor()
-    result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.gender,studentperformance.hackerrankid,studentperformance.githubid,studentperformance.linkedinid,studentperformance.hackerrank_problems,studentregistration.batch,studentperformance.github_status from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
+    result_cursor = data_cursor.execute('select studentregistration.userid,studentregistration.name,studentregistration.gender,studentperformance.hackerrankid,studentperformance.githubid,studentperformance.linkedinid,studentperformance.hackerrank_problems,studentregistration.batch,studentperformance.github_status,studentregistration.job_status from studentregistration INNER JOIN studentperformance ON  studentregistration.userid=studentperformance.userid')
     result_data_set={}
     result_data = result_cursor.fetchall()
     for row in result_data:
         hack_data = json.loads(row[6])
         git_data = json.loads(row[8])
-        # and row[5]!='null' and row[5]!=None
-        if(hack_data['problems_count']>=66 and row[7]!='sept2017'):
+        job_data = json.loads(row[9])
+        # and row[5]!='null' and row[5]!=None and row[7]!='Sept2017'
+        if(hack_data['problems_count']>=66):
             row_id = row[0]
             result_data_set[row_id]={}
             result_data_set[row_id]['student_name']= row[1].title()
@@ -191,6 +192,8 @@ def get_details():
             result_data_set[row_id]['linkedinid']= row[5]
             result_data_set[row_id]['problems_count'] = hack_data['problems_count']
             result_data_set[row_id]['repo_count'] = git_data['repo_count']
+            result_data_set[row_id]['job_status'] = job_data['job_status']
+            result_data_set[row_id]['batch'] = row[7]
     #print(result_data_set)
     return json.dumps(result_data_set)
 #print(get_details())
